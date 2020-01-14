@@ -1,3 +1,19 @@
 chat-format:
     format: "&7%displayname% &8:: &7%message%"
 cooldown-seconds: 3
+blacklisted-words:
+- "noob"
+announcements:
+    example:
+        json: false
+        text:
+        - "&8-------------------------------------------"
+        - "&7 > Report bugs on https://discord.gg/Wf4xb78 <"
+        - "&8-------------------------------------------"
+        period: 120 # seconds
+        permission: "announce.receive.example"
+    json-example:
+        json: true
+        text:
+        - "{\"text\":\"&c&lReport hackers on https://discord.gg/Wf4xb78\"}"
+        period: 150

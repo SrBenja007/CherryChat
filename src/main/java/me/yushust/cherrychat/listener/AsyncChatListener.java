@@ -19,10 +19,10 @@ public class AsyncChatListener implements Listener {
 
         Player sender = event.getPlayer();
 
+        plugin.getModuleContainer().acceptAll(event);
+
         String format = plugin.getFormatter().format(sender, event.getMessage());
         event.setFormat(format);
-
-        plugin.getModuleContainer().acceptAll(event);
     }
 
 }
