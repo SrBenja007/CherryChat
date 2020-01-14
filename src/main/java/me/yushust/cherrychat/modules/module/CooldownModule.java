@@ -20,7 +20,8 @@ public class CooldownModule extends AbstractChatPluginModule {
             Player player = event.getPlayer();
 
             if(cooldownHandler.isInCooldown(player.getUniqueId())) {
-                player.sendMessage(plugin.getLanguage().getString("you-are-in-cooldown"));
+                player.sendMessage(plugin.getLanguage().getString("you-are-in-cooldown")
+                        .replace("%cooldown%", cooldownHandler.getCooldown(player.getUniqueId(), "0.00")));
                 event.setCancelled(true);
                 return;
             }

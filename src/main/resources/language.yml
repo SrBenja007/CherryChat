@@ -1,1 +1,1 @@
-you-are-in-cooldown: "&cPlease wait 5 seconds to chat again"
+you-are-in-cooldown: "&cPlease wait %cooldown% seconds to chat again"

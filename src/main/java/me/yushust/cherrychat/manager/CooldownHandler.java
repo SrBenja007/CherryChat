@@ -1,11 +1,20 @@
 package me.yushust.cherrychat.manager;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
 public class CooldownHandler<T> {
 
     private Map<T, Long> cooldown = new HashMap<>();
+
+    public String getCooldown(T value, String format) {
+        DecimalFormat decimalFormat = new DecimalFormat(format);
+        long current = System.currentTimeMillis();
+        long expire = cooldown.getOrDefault(value, current) - current;
+        double expireSeconds = expire / 1000D;
+        return decimalFormat.format(expireSeconds);
+    }
 
     public void addToCooldown(T value, long cooldownMillis) {
         if(!cooldown.containsKey(value)) {
