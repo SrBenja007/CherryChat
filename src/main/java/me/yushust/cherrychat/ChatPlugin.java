@@ -7,9 +7,7 @@ import me.yushust.cherrychat.listener.AsyncChatListener;
 import me.yushust.cherrychat.manager.CommandManager;
 import me.yushust.cherrychat.manager.SimpleCommandManager;
 import me.yushust.cherrychat.modules.ChatModulesContainer;
-import me.yushust.cherrychat.modules.module.BlacklistModule;
-import me.yushust.cherrychat.modules.module.CooldownModule;
-import me.yushust.cherrychat.modules.module.SpamFilterModule;
+import me.yushust.cherrychat.modules.module.*;
 import me.yushust.cherrychat.task.AnnouncerTask;
 import me.yushust.cherrychat.util.Announcement;
 import me.yushust.cherrychat.util.Configuration;
@@ -66,7 +64,6 @@ public final class ChatPlugin extends JavaPlugin {
     private void installModules() {
         moduleContainer.installModule(new CooldownModule());
         moduleContainer.installModule(new BlacklistModule());
-        moduleContainer.installModule(new SpamFilterModule());
     }
 
     private void registerCommands() {

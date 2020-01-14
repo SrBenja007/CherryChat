@@ -56,7 +56,7 @@ public class Announcement {
             if(legacy) {
                 components.addAll(Arrays.asList(ComponentSerializer.parse(line)));
             } else {
-                components.add(new TextComponent(line));
+                components.add(new TextComponent(line + "\n"));
             }
         }
 
