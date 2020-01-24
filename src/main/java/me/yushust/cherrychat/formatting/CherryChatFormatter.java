@@ -1,13 +1,13 @@
 package me.yushust.cherrychat.formatting;
 
-import lombok.RequiredArgsConstructor;
 import me.yushust.cherrychat.ChatPlugin;
 import org.bukkit.entity.Player;
 
-@RequiredArgsConstructor
 public class CherryChatFormatter extends AbstractFormatter {
 
-    private final ChatPlugin plugin;
+    public CherryChatFormatter(ChatPlugin plugin) {
+        super(plugin);
+    }
 
     @Override
     public String format(Message message) {

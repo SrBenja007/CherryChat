@@ -1,5 +1,6 @@
 package me.yushust.cherrychat.modules.module;
 
+import lombok.RequiredArgsConstructor;
 import me.yushust.cherrychat.ChatPlugin;
 import me.yushust.cherrychat.manager.CooldownHandler;
 import me.yushust.cherrychat.modules.AbstractChatPluginModule;
@@ -9,9 +10,10 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+@RequiredArgsConstructor
 public class CooldownModule extends AbstractChatPluginModule {
 
-    private ChatPlugin plugin = ChatPlugin.getInstance();
+    private final ChatPlugin plugin;
     private CooldownHandler<UUID> cooldownHandler = new CooldownHandler<>();
 
     @Override

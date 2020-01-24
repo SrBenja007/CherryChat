@@ -1,6 +1,7 @@
 package me.yushust.cherrychat;
 
 import lombok.Getter;
+import lombok.Setter;
 import me.yushust.cherrychat.formatting.CherryChatFormatter;
 import me.yushust.cherrychat.formatting.Formatter;
 import me.yushust.cherrychat.listener.AsyncChatListener;
@@ -13,16 +14,21 @@ import me.yushust.cherrychat.util.Announcement;
 import me.yushust.cherrychat.util.Configuration;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+
 @Getter
 public final class ChatPlugin extends JavaPlugin {
-
-    private static ChatPlugin instance;
 
     private Configuration config;
     private Configuration language;
 
     private boolean placeholderApiEnabled;
     private boolean vaultApiEnabled;
+
+    @Setter
+    private Set<UUID> playersMoved;
 
     private CommandManager commandManager;
     private ChatModulesContainer moduleContainer;
@@ -31,8 +37,6 @@ public final class ChatPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        ChatPlugin.instance = this;
-
         this.config = new Configuration(this, "config");
         this.language = new Configuration(this, "language");
 
@@ -50,7 +54,9 @@ public final class ChatPlugin extends JavaPlugin {
 
         this.installModules();
 
-        getServer().getPluginManager().registerEvents(new AsyncChatListener(), this);
+        this.playersMoved = new HashSet<>();
+
+        getServer().getPluginManager().registerEvents(new AsyncChatListener(this), this);
     }
 
     private void setupAnnouncements() {
@@ -62,19 +68,14 @@ public final class ChatPlugin extends JavaPlugin {
     }
 
     private void installModules() {
-        moduleContainer.installModule(new CooldownModule());
-        moduleContainer.installModule(new BlacklistModule());
+        moduleContainer.installModule(new CooldownModule(this));
+        moduleContainer.installModule(new BlacklistModule(this));
+        moduleContainer.installModule(new AntiBotSpamModule(this));
+        moduleContainer.installModule(new FloodFilterModule(this));
     }
 
     private void registerCommands() {
 
     }
-
-    @Override
-    public void onDisable() {
-        ChatPlugin.instance = null;
-    }
-
-    public static ChatPlugin getInstance() { return ChatPlugin.instance; }
 
 }

@@ -29,7 +29,7 @@ public class Announcement {
     public void announce() {
         Bukkit.getOnlinePlayers().stream()
                 .filter(player -> {
-                    if(permission == null) return true;
+                    if(permission == null || permission.equalsIgnoreCase("none")) return true;
                     return player.hasPermission(permission);
                 }).forEach(player ->
                     player.spigot().sendMessage(components.toArray(new BaseComponent[0]))

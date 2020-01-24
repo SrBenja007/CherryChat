@@ -1,8 +1,62 @@
+#
+#    ___ _                        ___ _         _
+#  / __| |_  ___ _ _ _ _ _  _   / __| |_  __ _| |_
+# | (__| ' \/ -_) '_| '_| || | | (__| ' \/ _` |  _|
+#  \___|_||_\___|_| |_|  \_, |  \___|_||_\__,_|\__|
+#                        |__/
+#
+# Chat format
+#    <string>
+#    * You can use CherryChat placeholders
+#         %name% - The player name
+#         %displayname% - The player display name
+#         %message% - The message
+#
+#    * You can use Placeholder API placeholders (if enabled)
+#         Placeholder API extension cloud:
+#            https://api.extendedclip.com/all/
+#         To use a placeholder you must install the extension.
+#         Example:
+#             To use "%player_name%" placeholder, you must install
+#             the "Player" extension. (Command: /papi ecloud download <extension name>)
+#
+#    * You can use Vault placeholders (if enabled)
+#          %prefix% - The player prefix
+#          %suffix% - The player suffix
+#          %group% - The player group
 chat-format:
     format: "&7%displayname% &8:: &7%message%"
+
+# The chat cooldown
+#     <integer>
+#    The players must wait the specified
+#    time (in seconds) to send a message again
 cooldown-seconds: 3
+
+# The blacklisted words
+#    <string list>
+#    Players should not send these words,
+#    but if they do, the words are censored.
+#    Example:
+#         noob => ****
+#         ez => **
 blacklisted-words:
 - "noob"
+
+# Minimum characters considered flood
+#     <integer>
+#     Represents the minimum number of
+#     characters in a text that's considered flood
+min-chars-considered-flood: 5
+
+# Announcements
+#     The announcements are set here.
+#     This is how an announcement is created:
+#     example-announcement:
+#         json: <boolean> (This field indicates whether the text will be taken as JSON or as plain text) - OPTIONAL (default: false)
+#         text: <string list> (The texts) - REQUIRED
+#         period: <integer> (The time interval (in seconds) in which it will be announced) - OPTIONAL (default: 120 seconds)
+#         permission: <string> (The necessary permission to receive the announcement) - OPTIONAL (default: none)
 announcements:
     example:
         json: false
@@ -17,3 +71,5 @@ announcements:
         text:
         - "{\"text\":\"&c&lReport hackers on https://discord.gg/Wf4xb78\"}"
         period: 150
+
+# Congratulations! You finished the configuration

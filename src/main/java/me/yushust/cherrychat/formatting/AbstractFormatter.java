@@ -2,13 +2,15 @@ package me.yushust.cherrychat.formatting;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.yushust.cherrychat.ChatPlugin;
 import org.bukkit.entity.Player;
 
+@RequiredArgsConstructor
 public abstract class AbstractFormatter implements Formatter {
 
-    protected ChatPlugin plugin = ChatPlugin.getInstance();
+    protected final ChatPlugin plugin;
 
     @Override
     public String format(Player player, String message) {
@@ -20,7 +22,7 @@ public abstract class AbstractFormatter implements Formatter {
         }
 
         if(plugin.isVaultApiEnabled()) {
-            VaultFormatter vaultFormatter = new VaultFormatter();
+            VaultFormatter vaultFormatter = new VaultFormatter(plugin);
             format = vaultFormatter.setPlaceholders(player, format);
         }
 
