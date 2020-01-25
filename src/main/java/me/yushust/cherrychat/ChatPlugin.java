@@ -2,9 +2,11 @@ package me.yushust.cherrychat;
 
 import lombok.Getter;
 import lombok.Setter;
+import me.yushust.cherrychat.command.ChatCommand;
 import me.yushust.cherrychat.formatting.CherryChatFormatter;
 import me.yushust.cherrychat.formatting.Formatter;
 import me.yushust.cherrychat.listener.AsyncChatListener;
+import me.yushust.cherrychat.listener.CommandListener;
 import me.yushust.cherrychat.manager.CommandManager;
 import me.yushust.cherrychat.manager.SimpleCommandManager;
 import me.yushust.cherrychat.modules.ChatModulesContainer;
@@ -12,9 +14,12 @@ import me.yushust.cherrychat.modules.module.*;
 import me.yushust.cherrychat.task.AnnouncerTask;
 import me.yushust.cherrychat.util.Announcement;
 import me.yushust.cherrychat.util.Configuration;
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -29,6 +34,7 @@ public final class ChatPlugin extends JavaPlugin {
 
     @Setter
     private Set<UUID> playersMoved;
+    private Set<ChatCommand> chatCommands;
 
     private CommandManager commandManager;
     private ChatModulesContainer moduleContainer;
@@ -54,9 +60,25 @@ public final class ChatPlugin extends JavaPlugin {
 
         this.installModules();
 
+        this.registerChatCommands();
         this.playersMoved = new HashSet<>();
 
         getServer().getPluginManager().registerEvents(new AsyncChatListener(this), this);
+        getServer().getPluginManager().registerEvents(new CommandListener(this), this);
+    }
+
+    private void registerChatCommands() {
+        if(chatCommands == null) chatCommands = new HashSet<>();
+        Map<String, String[]> aliases = Bukkit.getCommandAliases();
+        for(String path : config.getConfigurationSection("chat-commands").getKeys(false)) {
+            ConfigurationSection chatCommandSection = config.getConfigurationSection("chat-commands." + path);
+            ChatCommand chatCommand = ChatCommand.build(chatCommandSection);
+            chatCommands.add(chatCommand);
+            for(String alias : aliases.getOrDefault(path, new String[0])) {
+                ChatCommand aliasedChatCommand = new ChatCommand(alias, chatCommand.getSlicedArguments());
+                chatCommands.add(aliasedChatCommand);
+            }
+        }
     }
 
     private void setupAnnouncements() {
@@ -72,6 +94,7 @@ public final class ChatPlugin extends JavaPlugin {
         moduleContainer.installModule(new BlacklistModule(this));
         moduleContainer.installModule(new AntiBotSpamModule(this));
         moduleContainer.installModule(new FloodFilterModule(this));
+        moduleContainer.installModule(new CapsFilterModule(this));
     }
 
     private void registerCommands() {

@@ -1,12 +1,12 @@
 package me.yushust.cherrychat.modules;
 
-import org.bukkit.event.player.AsyncPlayerChatEvent;
+import me.yushust.cherrychat.event.AsyncCherryChatEvent;
 
 import java.util.function.Consumer;
 
 public interface ChatPluginModule {
 
-    Consumer<AsyncPlayerChatEvent> getChatConsumer();
+    Consumer<AsyncCherryChatEvent> getChatConsumer();
 
     void install(ChatPluginModule module);
 

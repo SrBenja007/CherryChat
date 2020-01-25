@@ -2,10 +2,10 @@ package me.yushust.cherrychat.modules.module;
 
 import lombok.RequiredArgsConstructor;
 import me.yushust.cherrychat.ChatPlugin;
+import me.yushust.cherrychat.event.AsyncCherryChatEvent;
 import me.yushust.cherrychat.manager.CooldownHandler;
 import me.yushust.cherrychat.modules.AbstractChatPluginModule;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -17,9 +17,14 @@ public class CooldownModule extends AbstractChatPluginModule {
     private CooldownHandler<UUID> cooldownHandler = new CooldownHandler<>();
 
     @Override
-    public Consumer<AsyncPlayerChatEvent> getChatConsumer() {
+    public Consumer<AsyncCherryChatEvent> getChatConsumer() {
         return event -> {
             Player player = event.getPlayer();
+
+            String cooldownBypassPermission = plugin.getConfig().getString("cooldown.bypass-permission");
+            if(player.hasPermission(cooldownBypassPermission)) {
+                return;
+            }
 
             if(cooldownHandler.isInCooldown(player.getUniqueId())) {
                 player.sendMessage(plugin.getLanguage().getString("you-are-in-cooldown")
@@ -28,7 +33,7 @@ public class CooldownModule extends AbstractChatPluginModule {
                 return;
             }
 
-            cooldownHandler.addToCooldown(player.getUniqueId(), plugin.getConfig().getInt("cooldown-seconds") * 1000L);
+            cooldownHandler.addToCooldown(player.getUniqueId(), plugin.getConfig().getInt("cooldown.time-seconds") * 1000L);
         };
     }
 

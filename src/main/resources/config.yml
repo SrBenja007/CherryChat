@@ -28,10 +28,18 @@ chat-format:
     format: "&7%displayname% &8:: &7%message%"
 
 # The chat cooldown
-#     <integer>
-#    The players must wait the specified
-#    time (in seconds) to send a message again
-cooldown-seconds: 3
+#    Chat cooldown
+cooldown:
+    # The Bypass Permission
+    #     <string>
+    #     Players who have this permission will
+    #     not have to wait to chat again
+    bypass-permission: ""
+    # Time Seconds
+    #     <integer>
+    #    The players must wait the specified
+    #    time (in seconds) to send a message again
+    time-seconds: 3
 
 # The blacklisted words
 #    <string list>
@@ -48,6 +56,30 @@ blacklisted-words:
 #     Represents the minimum number of
 #     characters in a text that's considered flood
 min-chars-considered-flood: 5
+
+# Capitalize first letter
+#      <boolean>
+#      Do you want to capitalize the first letter
+#      of all messages?
+#          Example:
+#              hello world => Hello world
+capitalize-first-letter: true
+
+# Minimun capitalized characters
+#      <integer>
+#      Represents the minimum number of
+#      characters in a text. If exceeded,
+#      the filter acts.
+#           Example:
+#                HELLO WORLD => hello world
+min-capitalized-chars: 5
+
+chat-commands:
+    global: # The plugin automatically searches for aliases! Incredible!
+        args: 1 # Args sliced. For example: /global <message> ==> "global" is sliced.
+    message:
+        args: 2 # Example: /message Yusshu <message> ==> "message" and "Yusshu" are sliced. 2
+
 
 # Announcements
 #     The announcements are set here.
