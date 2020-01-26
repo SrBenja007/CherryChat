@@ -2,9 +2,9 @@ package me.yushust.cherrychat.modules.module;
 
 import lombok.RequiredArgsConstructor;
 import me.yushust.cherrychat.ChatPlugin;
+import me.yushust.cherrychat.event.AsyncCherryChatEvent;
 import me.yushust.cherrychat.modules.AbstractChatPluginModule;
 import me.yushust.cherrychat.util.Texts;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import java.util.function.Consumer;
 
@@ -14,7 +14,7 @@ public class FloodFilterModule extends AbstractChatPluginModule  {
     private final ChatPlugin plugin;
 
     @Override
-    public Consumer<AsyncPlayerChatEvent> getChatConsumer() {
+    public Consumer<AsyncCherryChatEvent> getChatConsumer() {
         return event -> {
 
             String message = event.getMessage();

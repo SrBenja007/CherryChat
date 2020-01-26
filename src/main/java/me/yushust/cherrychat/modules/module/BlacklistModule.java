@@ -20,11 +20,13 @@ public class BlacklistModule extends AbstractChatPluginModule {
 
             List<String> badWords = plugin.getConfig().getStringList("blacklisted-words");
             String message = event.getMessage();
+
             for(String badWord : badWords) {
                 if(message.contains(badWord)) {
                     message = message.replaceAll(badWord, Strings.repeat("*", badWord.length()));
                 }
             }
+
             event.setMessage(message);
         };
     }
