@@ -9,7 +9,6 @@ import me.yushust.cherrychat.listener.AsyncChatListener;
 import me.yushust.cherrychat.listener.CommandListener;
 import me.yushust.cherrychat.manager.CommandManager;
 import me.yushust.cherrychat.manager.SimpleCommandManager;
-import me.yushust.cherrychat.messaging.Messenger;
 import me.yushust.cherrychat.modules.ChatModulesContainer;
 import me.yushust.cherrychat.modules.module.*;
 import me.yushust.cherrychat.task.AnnouncerTask;
@@ -39,7 +38,6 @@ public final class ChatPlugin extends JavaPlugin {
 
     private CommandManager commandManager;
     private ChatModulesContainer moduleContainer;
-    private Messenger messenger;
 
     private Formatter formatter;
 
