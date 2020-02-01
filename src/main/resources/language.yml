@@ -1,2 +1,5 @@
 you-are-in-cooldown: "&cPlease wait %cooldown% seconds to chat again"
 please-move: "&cYou must move before chat"
+what: "&cYou can't send yourself a message"
+usage: "&cCorrect usage: %usage%"
+offline: "&cThe player %player% isn't online!"

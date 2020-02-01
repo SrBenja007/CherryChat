@@ -3,6 +3,7 @@ package me.yushust.cherrychat;
 import lombok.Getter;
 import lombok.Setter;
 import me.yushust.cherrychat.command.ChatCommand;
+import me.yushust.cherrychat.command.MessageCommand;
 import me.yushust.cherrychat.formatting.CherryChatFormatter;
 import me.yushust.cherrychat.formatting.Formatter;
 import me.yushust.cherrychat.listener.AsyncChatListener;
@@ -92,6 +93,7 @@ public final class ChatPlugin extends JavaPlugin {
     }
 
     private void installModules() {
+        moduleContainer.installModule(new DotModule());
         moduleContainer.installModule(new MentionsModule(this));
         moduleContainer.installModule(new CooldownModule(this));
         moduleContainer.installModule(new CapsFilterModule(this));
@@ -101,7 +103,7 @@ public final class ChatPlugin extends JavaPlugin {
     }
 
     private void registerCommands() {
-
+        // this.commandManager.registerCommand(new MessageCommand(this), "message", "msg", "tell");
     }
 
 }
