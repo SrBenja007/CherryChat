@@ -7,6 +7,7 @@ import me.yushust.cherrychat.formatting.CherryChatFormatter;
 import me.yushust.cherrychat.formatting.Formatter;
 import me.yushust.cherrychat.listener.AsyncChatListener;
 import me.yushust.cherrychat.listener.CommandListener;
+import me.yushust.cherrychat.listener.MoveListener;
 import me.yushust.cherrychat.manager.CommandManager;
 import me.yushust.cherrychat.manager.SimpleCommandManager;
 import me.yushust.cherrychat.modules.ChatModulesContainer;
@@ -63,6 +64,7 @@ public final class ChatPlugin extends JavaPlugin {
         this.registerChatCommands();
         this.playersMoved = new HashSet<>();
 
+        getServer().getPluginManager().registerEvents(new MoveListener(this), this);
         getServer().getPluginManager().registerEvents(new AsyncChatListener(this), this);
         getServer().getPluginManager().registerEvents(new CommandListener(this), this);
     }
@@ -90,11 +92,12 @@ public final class ChatPlugin extends JavaPlugin {
     }
 
     private void installModules() {
+        moduleContainer.installModule(new MentionsModule(this));
         moduleContainer.installModule(new CooldownModule(this));
-        moduleContainer.installModule(new BlacklistModule(this));
-        moduleContainer.installModule(new AntiBotSpamModule(this));
-        moduleContainer.installModule(new FloodFilterModule(this));
         moduleContainer.installModule(new CapsFilterModule(this));
+        moduleContainer.installModule(new BlacklistModule(this));
+        moduleContainer.installModule(new FloodFilterModule(this));
+        moduleContainer.installModule(new AntiBotSpamModule(this));
     }
 
     private void registerCommands() {

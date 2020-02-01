@@ -17,7 +17,7 @@ public class TextsTest {
     @Test
     public void capsTest() {
         String text = "HELLO there";
-        System.out.println(Texts.capitalizeFirst(Texts.toLowerCase(text, new ArrayList<>(), 5)));
+        System.out.println(Texts.capitalizeFirst(Texts.toLowerCase(text, 5)));
     }
 
 }

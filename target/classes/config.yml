@@ -26,6 +26,7 @@
 #          %group% - The player group
 chat-format:
     format: "&7%displayname% &8:: &7%message%"
+    mention: "&e@%name%&7"
 
 # The chat cooldown
 #    Chat cooldown

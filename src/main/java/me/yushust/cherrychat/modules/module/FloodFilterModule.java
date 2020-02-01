@@ -17,6 +17,8 @@ public class FloodFilterModule extends AbstractChatPluginModule  {
     public Consumer<AsyncCherryChatEvent> getChatConsumer() {
         return event -> {
 
+            if(event.isCancelled()) return;
+
             String message = event.getMessage();
             int minChars = plugin.getConfig().getInt("min-chars-considered-flood");
             String floodFilteredMessage = Texts.decreaseAlphaNumerics(message, minChars);

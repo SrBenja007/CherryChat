@@ -19,6 +19,9 @@ public class CooldownModule extends AbstractChatPluginModule {
     @Override
     public Consumer<AsyncCherryChatEvent> getChatConsumer() {
         return event -> {
+
+            if(event.isCancelled()) return;
+
             Player player = event.getPlayer();
 
             String cooldownBypassPermission = plugin.getConfig().getString("cooldown.bypass-permission");

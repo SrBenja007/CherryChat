@@ -21,6 +21,8 @@ public class CapsFilterModule extends AbstractChatPluginModule {
     public Consumer<AsyncCherryChatEvent> getChatConsumer() {
             return event -> {
 
+                if(event.isCancelled()) return;
+
                 boolean capitalizeFirstLetter = plugin.getConfig().getBoolean("capitalize-first-letter");
 
                 String message = event.getMessage();
@@ -28,7 +30,6 @@ public class CapsFilterModule extends AbstractChatPluginModule {
 
                 message = Texts.toLowerCase(
                         message,
-                        Bukkit.getOnlinePlayers().stream().map(Player::getName).collect(Collectors.toList()),
                         minCapitalizedChars
                 );
 

@@ -1,10 +1,8 @@
 package me.yushust.cherrychat.util;
 
 import com.google.common.base.Strings;
-import org.apache.commons.lang.StringUtils;
-
-import java.util.Collections;
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 public class Texts {
 
@@ -41,13 +39,19 @@ public class Texts {
         return textWithoutFlood;
     }
 
-    public static String toLowerCase(String text, List<String> exclusions, int minLetters) {
+    public static int count(String text, String value) {
+        int count = 0;
+        while(text.contains(value)) {
+            text = text.replaceFirst(value, "~~ignore~~");
+            count++;
+        }
+        return count;
+    }
+
+    public static String toLowerCase(String text, int minLetters) {
         String textFormatted = text;
         if(minLetters < 0) minLetters = 0;
-        Collections.sort(exclusions);
-        for(String exclusion : exclusions) {
-            textFormatted = textFormatted.replace(exclusion, "%%exclusion%%");
-        }
+
         int upperCaseChars = 0;
         for(char c : textFormatted.toCharArray()) {
             if(Character.isUpperCase(c)) {
@@ -57,9 +61,7 @@ public class Texts {
         if(upperCaseChars >= minLetters) {
             textFormatted = textFormatted.toLowerCase();
         }
-        for(String exclusion : exclusions) {
-            textFormatted = textFormatted.replaceFirst("%%exclusion%%", exclusion);
-        }
+
         return textFormatted;
     }
 
