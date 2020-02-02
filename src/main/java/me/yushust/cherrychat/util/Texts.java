@@ -39,6 +39,15 @@ public class Texts {
         return textWithoutFlood;
     }
 
+    public static boolean containsAny(String text, String... values) {
+        for(String value : values) {
+            if(text.contains(value)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static int count(String text, String value) {
         int count = 0;
         while(text.contains(value)) {

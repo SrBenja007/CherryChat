@@ -3,12 +3,11 @@ package me.yushust.cherrychat;
 import lombok.Getter;
 import lombok.Setter;
 import me.yushust.cherrychat.command.ChatCommand;
-import me.yushust.cherrychat.command.MessageCommand;
+import me.yushust.cherrychat.command.MessagingCommands;
 import me.yushust.cherrychat.formatting.CherryChatFormatter;
 import me.yushust.cherrychat.formatting.Formatter;
-import me.yushust.cherrychat.listener.AsyncChatListener;
-import me.yushust.cherrychat.listener.CommandListener;
-import me.yushust.cherrychat.listener.MoveListener;
+import me.yushust.cherrychat.listener.*;
+import me.yushust.cherrychat.manager.CommandLoggingFilter;
 import me.yushust.cherrychat.manager.CommandManager;
 import me.yushust.cherrychat.manager.SimpleCommandManager;
 import me.yushust.cherrychat.modules.ChatModulesContainer;
@@ -16,6 +15,8 @@ import me.yushust.cherrychat.modules.module.*;
 import me.yushust.cherrychat.task.AnnouncerTask;
 import me.yushust.cherrychat.util.Announcement;
 import me.yushust.cherrychat.util.Configuration;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.Filter;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -45,6 +46,12 @@ public final class ChatPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+
+        Filter loggingFilter = new CommandLoggingFilter();
+
+        org.apache.logging.log4j.core.Logger mainLogger = (org.apache.logging.log4j.core.Logger) LogManager.getRootLogger();
+        mainLogger.addFilter(loggingFilter);
+
         this.config = new Configuration(this, "config");
         this.language = new Configuration(this, "language");
 
@@ -65,6 +72,7 @@ public final class ChatPlugin extends JavaPlugin {
         this.registerChatCommands();
         this.playersMoved = new HashSet<>();
 
+        getServer().getPluginManager().registerEvents(new QuitListener(this), this);
         getServer().getPluginManager().registerEvents(new MoveListener(this), this);
         getServer().getPluginManager().registerEvents(new AsyncChatListener(this), this);
         getServer().getPluginManager().registerEvents(new CommandListener(this), this);
@@ -103,7 +111,10 @@ public final class ChatPlugin extends JavaPlugin {
     }
 
     private void registerCommands() {
-        // this.commandManager.registerCommand(new MessageCommand(this), "message", "msg", "tell");
+        MessagingCommands messagingCommands = new MessagingCommands(this);
+
+        this.commandManager.registerCommand(messagingCommands.getMessageCommand(), "message", "msg", "tell", "whisper");
+        this.commandManager.registerCommand(messagingCommands.getReplyCommand(), "reply", "r", "re");
     }
 
 }

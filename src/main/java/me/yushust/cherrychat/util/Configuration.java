@@ -1,6 +1,7 @@
 package me.yushust.cherrychat.util;
 
 import lombok.Getter;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -31,13 +32,11 @@ public class Configuration extends YamlConfiguration {
 
     @Override
     public String getString(String path){
-        String getted;
         try{
-            getted = super.getString(path);
+            return ChatColor.translateAlternateColorCodes('&', super.getString(path));
         }catch(NullPointerException e){
-            getted = path;
+            return path;
         }
-        return getted.replace('&', '§');
     }
 
     public ItemStack getItemStack(String path, ItemStack def) {

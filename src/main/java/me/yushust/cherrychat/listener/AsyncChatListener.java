@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import me.yushust.cherrychat.ChatPlugin;
 import me.yushust.cherrychat.event.AsyncCherryChatEvent;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -36,23 +37,19 @@ public class AsyncChatListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onCherryChat(AsyncCherryChatEvent event) {
-        if(event.isCancelled()) {
-            return;
-        }
+        if(event.isCancelled()) return;
 
         Player sender = event.getPlayer();
 
         plugin.getModuleContainer().acceptAll(event);
 
-        if(event.isCancelled()) {
-            return;
-        }
+        if(event.isCancelled() || event.isAsCommand()) return;
 
-        if(event.isAsCommand()) {
-            return;
-        }
+        String message = event.getMessage();
+        if(event.getPlayer().hasPermission(plugin.getConfig().getString("chat-format.color-permission")))
+            message = ChatColor.translateAlternateColorCodes('&', message);
 
-        String format = plugin.getFormatter().format(sender, event.getMessage());
+        String format = plugin.getFormatter().format(sender, message);
         event.setFormat(format);
     }
 

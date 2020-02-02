@@ -34,5 +34,6 @@ public class SimpleCommandManager implements CommandManager {
 
     public void registerCommand(ChatPluginCommand command, @NonNull String... names) {
         bukkitCommandMap.register(names[0], plugin.getName(), new BukkitCommandWrapper(command, names));
+        plugin.getLogger().info("Registered command \"" + names[0] + "\"");
     }
 }
