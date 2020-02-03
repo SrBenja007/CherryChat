@@ -29,6 +29,22 @@ chat-format:
     format: "&7%displayname% &8:: &7%message%"
     mention: "&e@%name%&7"
 
+storaging:
+    type: "MONGODB" # Types: MongoDB, Yaml
+    host: "127.0.0.1"
+    port: 27017
+    username: ""
+    password: ""
+    database: "cherrychat"
+
+
+per-world-chat:
+    enabled: true
+    share:
+        world:
+        - "world_nether"
+        - "world_the_end"
+
 # The chat cooldown
 #    Chat cooldown
 cooldown:

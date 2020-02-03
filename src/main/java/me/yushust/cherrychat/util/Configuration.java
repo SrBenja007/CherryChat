@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.util.List;
 
 public class Configuration extends YamlConfiguration {
 
@@ -42,6 +43,11 @@ public class Configuration extends YamlConfiguration {
     public ItemStack getItemStack(String path, ItemStack def) {
         if(!this.contains(path)) return def;
         return super.getItemStack(path);
+    }
+
+    public List<String> getStringList(String path, List<String> def) {
+        if(!super.contains(path)) return def;
+        return super.getStringList(path);
     }
 
     public <T> T get(Class<T> clazz, String path){
