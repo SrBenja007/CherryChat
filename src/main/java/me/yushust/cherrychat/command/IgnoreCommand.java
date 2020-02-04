@@ -3,7 +3,7 @@ package me.yushust.cherrychat.command;
 import lombok.RequiredArgsConstructor;
 import me.yushust.cherrychat.ChatPlugin;
 import me.yushust.cherrychat.model.User;
-import me.yushust.cherrychat.storaging.DataHandler;
+import me.yushust.cherrychat.storage.DataHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

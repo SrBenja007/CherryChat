@@ -108,11 +108,27 @@ capitalize-first-letter: true
 #                HELLO WORLD => hello world
 min-capitalized-chars: 5
 
+custom-achievements-messages:
+    enabled: true
+    message: "&e>>> &8%name% &7just earned &8%achievement%&7!" # set to "none" to disable default achievement messages
+
 chat-commands:
-    global: # The plugin automatically searches for aliases! Incredible!
-        args: 1 # Args sliced. For example: /global <message> ==> "global" is sliced.
+    # global:
+    #    args: 1 # Args sliced. For example: /global <message> ==> "global" is sliced.
     message:
         args: 2 # Example: /message Yusshu <message> ==> "message" and "Yusshu" are sliced. 2
+    msg:
+        args: 2
+    tell:
+        args: 2
+    r:
+        args: 1
+    whisper:
+        args: 2
+    re:
+        args: 1
+    reply:
+        args: 1
 
 message:
     in: "&5[&7%s&5] &8-> &5[&7You&5]: &8%s"

@@ -51,6 +51,7 @@ public class Configuration extends YamlConfiguration {
     }
 
     public <T> T get(Class<T> clazz, String path){
+        if(!super.contains(path)) return null;
         Object obj = super.get(path);
         return clazz.cast(obj);
     }

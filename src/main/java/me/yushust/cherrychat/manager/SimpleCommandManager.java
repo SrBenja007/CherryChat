@@ -11,18 +11,18 @@ import org.bukkit.plugin.Plugin;
 import java.lang.reflect.Field;
 import java.util.logging.Level;
 
+@Getter
 public class SimpleCommandManager implements CommandManager {
 
-    @Getter
     private Plugin plugin;
-    private CommandMap bukkitCommandMap;
+    private CommandMap commandMap;
 
     public SimpleCommandManager(Plugin plugin) {
         this.plugin = plugin;
         try {
             Field commandMapField = Bukkit.getServer().getClass().getDeclaredField("commandMap");
             commandMapField.setAccessible(true);
-            this.bukkitCommandMap = (CommandMap) commandMapField.get(Bukkit.getServer());
+            this.commandMap = (CommandMap) commandMapField.get(Bukkit.getServer());
         } catch (Exception exception) {
             Bukkit.getLogger().log(
                     Level.SEVERE,
@@ -33,7 +33,7 @@ public class SimpleCommandManager implements CommandManager {
     }
 
     public void registerCommand(ChatPluginCommand command, @NonNull String... names) {
-        bukkitCommandMap.register(names[0], plugin.getName(), new BukkitCommandWrapper(command, names));
-        plugin.getLogger().info("Registered command \"" + names[0] + "\"");
+        commandMap.register(names[0], plugin.getName(), new BukkitCommandWrapper(command, names));
+        Bukkit.getConsoleSender().sendMessage("§e>>> §7Registered command \"" + names[0] + "\"");
     }
 }

@@ -39,8 +39,8 @@ public class CommandListener implements Listener {
                     event.setCancelled(true);
                     return;
                 }
-
                 event.setMessage(command.setMessage(event.getMessage(), chatEvent.getMessage()));
+                break;
             }
         }
     }

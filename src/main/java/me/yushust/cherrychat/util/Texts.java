@@ -4,6 +4,8 @@ import com.google.common.base.Strings;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.*;
+
 public class Texts {
 
     /*public static final Pattern COLOR_PATTERN = Pattern.compile("(?i)&([0-9A-fa-f])");
@@ -39,6 +41,26 @@ public class Texts {
         return textWithoutFlood;
     }
 
+    public static List<String> toStringCharList(String text) {
+        List<String> list = new ArrayList<>();
+        for(char c : text.toCharArray()) {
+            list.add(String.valueOf(c));
+        }
+        return list;
+    }
+
+    public static String messUp(String text) {
+        Random generator = new Random(System.currentTimeMillis());
+        List<String> list = toStringCharList(text);
+        StringBuilder messedText = new StringBuilder();
+        while(!list.isEmpty()) {
+            String random = list.get(generator.nextInt(list.size()));
+            messedText.append(random);
+            list.remove(random);
+        }
+        return messedText.toString();
+    }
+
     public static boolean containsAny(String text, String... values) {
         for(String value : values) {
             if(text.contains(value)) {
@@ -46,6 +68,15 @@ public class Texts {
             }
         }
         return false;
+    }
+
+    public static String asTitle(String text) {
+        StringBuilder builder = new StringBuilder();
+        for(String word : text.split(" ")) {
+            builder.append(capitalizeFirst(word));
+            builder.append(" ");
+        }
+        return builder.toString().trim();
     }
 
     public static int count(String text, String value) {

@@ -10,9 +10,8 @@ public class BukkitCommandWrapper extends Command {
     private ChatPluginCommand command;
 
     public BukkitCommandWrapper(ChatPluginCommand command, String[] aliases) {
-        super(aliases[0]);
+        super(aliases[0], "","", Arrays.asList(aliases).subList(0, aliases.length));
         this.command = command;
-        this.setAliases(Arrays.asList(Arrays.copyOfRange(aliases, 1, aliases.length)));
     }
 
     public boolean execute(CommandSender sender, String label, String[] args) {
