@@ -24,8 +24,8 @@ public class CooldownModule extends AbstractChatPluginModule {
 
             Player player = event.getPlayer();
 
-            String cooldownBypassPermission = plugin.getConfig().getString("cooldown.bypass-permission");
-            if(player.hasPermission(cooldownBypassPermission)) {
+            String cooldownBypassPermission = plugin.getConfig().getString("cooldown.bypass-permission", "none");
+            if(cooldownBypassPermission.equals("none") || player.hasPermission(cooldownBypassPermission)) {
                 return;
             }
 

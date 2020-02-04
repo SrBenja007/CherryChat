@@ -29,6 +29,37 @@ chat-format:
     format: "&7%displayname% &8:: &7%message%"
     mention: "&e@%name%&7"
 
+storaging:
+    type: "MONGODB" # Types: MongoDB, Yaml
+    host: "127.0.0.1"
+    port: 27017
+    username: ""
+    password: ""
+    database: "cherrychat"
+
+join-quit-messages:
+    join:
+        default: # priority is higher while the section is placed below
+            permission: "none"
+            message: "none"
+        vip:
+            permission: "cherrychat.vip"
+            message: "&5[CherryChat] &7%name% &fhas joined the game! &bIt's VIP!"
+    quit:
+        default:
+            permission: "none"
+            message: "none"
+        vip:
+            permission: "cherrychat.vip"
+            message: "&5[CherryChat] &7%name% &fleft the game :("
+
+per-world-chat:
+    enabled: false
+    share:
+        world:
+        - "world_nether"
+        - "world_the_end"
+
 # The chat cooldown
 #    Chat cooldown
 cooldown:
@@ -36,7 +67,7 @@ cooldown:
     #     <string>
     #     Players who have this permission will
     #     not have to wait to chat again
-    bypass-permission: ""
+    bypass-permission: "cherrychat.cooldown.bypass" # If "none" is placed, the cooldown is disabled for all players
     # Time Seconds
     #     <integer>
     #    The players must wait the specified
@@ -52,6 +83,7 @@ cooldown:
 #         ez => **
 blacklisted-words:
 - "noob"
+- "ez"
 
 # Minimum characters considered flood
 #     <integer>

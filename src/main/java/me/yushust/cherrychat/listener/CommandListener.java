@@ -34,6 +34,13 @@ public class CommandListener implements Listener {
                 );
 
                 Bukkit.getPluginManager().callEvent(chatEvent);
+
+                if(chatEvent.isCancelled()) {
+                    event.setCancelled(true);
+                    return;
+                }
+
+                event.setMessage(command.setMessage(event.getMessage(), chatEvent.getMessage()));
             }
         }
     }

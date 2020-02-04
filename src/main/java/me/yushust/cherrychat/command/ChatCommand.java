@@ -14,6 +14,11 @@ public class ChatCommand {
     private String name;
     private int slicedArguments;
 
+    public String setMessage(String format, String message) {
+        String[] args = Arrays.copyOfRange(format.split(" "), 0, slicedArguments);
+        return Joiner.on(" ").join(args) + " " + message;
+    }
+
     public String getMessage(String format) {
         String[] args = format.split(" ");
         return Joiner.on(" ").join(Arrays.copyOfRange(args, slicedArguments, args.length));

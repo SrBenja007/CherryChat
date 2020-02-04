@@ -4,7 +4,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 import java.util.UUID;
 
-public interface DataHandler<T> {
+public interface DataHandler<T extends Identifiable> {
 
     ListenableFuture<T> find(UUID id);
 
@@ -12,7 +12,7 @@ public interface DataHandler<T> {
 
     ListenableFuture<Void> save(T data);
 
-    ListenableFuture<Void> remove(T data);
+    ListenableFuture<Void> remove(UUID id);
 
     T findSync(UUID id);
 

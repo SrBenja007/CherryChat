@@ -51,13 +51,21 @@ public class Announcement {
         String permission = section.getString("permission", null);
 
         List<BaseComponent> components = new ArrayList<>();
+        int count = 0;
         for(String line : textLines) {
             line = ChatColor.translateAlternateColorCodes('&', line);
             if(legacy) {
                 components.addAll(Arrays.asList(ComponentSerializer.parse(line)));
             } else {
-                components.add(new TextComponent(line + "\n"));
+                TextComponent component;
+                if(count == textLines.size() - 1){
+                    component = new TextComponent(line);
+                } else {
+                    component = new TextComponent(line + "\n");
+                }
+                components.add(component);
             }
+            count++;
         }
 
         return new Announcement(components, periodSeconds, permission);

@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import me.yushust.cherrychat.event.AsyncCherryChatEvent;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -14,7 +14,7 @@ public class ChatModulesContainer {
     private Set<Consumer<AsyncCherryChatEvent>> listeners;
 
     public void installModule(ChatPluginModule module) {
-        if(listeners == null) listeners = new HashSet<>();
+        if(listeners == null) listeners = new LinkedHashSet<>();
         listeners.add(module.getChatConsumer());
     }
 

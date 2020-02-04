@@ -8,28 +8,34 @@ import me.yushust.cherrychat.ChatPlugin;
 import org.bukkit.entity.Player;
 
 @RequiredArgsConstructor
-public abstract class AbstractFormatter implements Formatter {
+public class DefaultFormatter implements Formatter {
 
     protected final ChatPlugin plugin;
 
     @Override
     public String format(Player player, String message) {
-
-        String format = Formatter.getDefaultFormat();
-
-        if(plugin.isPlaceholderApiEnabled()) {
-            format = PlaceholderAPI.setPlaceholders(player, format);
-        }
-
-        if(plugin.isVaultApiEnabled()) {
-            VaultFormatter vaultFormatter = new VaultFormatter(plugin);
-            format = vaultFormatter.setPlaceholders(player, format);
-        }
-
-        return format(new Message(player, message, format.replace("%message%", message)));
+        return format(player, Formatter.getDefaultFormat(), message);
     }
 
-    public abstract String format(Message message);
+    protected final String format(Player player, String format, String message) {
+        return setPlaceholders(player, format.replace("%message%", message));
+    }
+
+    @Override
+    public String setPlaceholders(Player player, String text) {
+        if(text == null) return null;
+
+        if(plugin.isPlaceholderApiEnabled()) {
+            text = PlaceholderAPI.setPlaceholders(player, text);
+        }
+        if(plugin.isVaultApiEnabled()) {
+            VaultFormatter vaultFormatter = new VaultFormatter(plugin);
+            text = vaultFormatter.setPlaceholders(player, text);
+        }
+        return text
+                .replace("%name%", player.getName())
+                .replace("%displayname%", player.getDisplayName());
+    }
 
     @AllArgsConstructor @Getter
     protected static class Message {

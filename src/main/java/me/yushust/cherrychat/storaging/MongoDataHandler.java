@@ -4,7 +4,7 @@ import org.mongodb.morphia.Datastore;
 
 import java.util.UUID;
 
-public class MongoDataHandler<T> extends AbstractDataHandler<T> {
+public class MongoDataHandler<T extends Identifiable> extends AbstractDataHandler<T> {
 
     private Class<T> clazz;
     private Datastore datastore;

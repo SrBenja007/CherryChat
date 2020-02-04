@@ -43,11 +43,16 @@ public class AsyncChatListener implements Listener {
 
         plugin.getModuleContainer().acceptAll(event);
 
-        if(event.isCancelled() || event.isAsCommand()) return;
+        if(event.isCancelled()) return;
 
         String message = event.getMessage();
         if(event.getPlayer().hasPermission(plugin.getConfig().getString("chat-format.color-permission")))
             message = ChatColor.translateAlternateColorCodes('&', message);
+
+        if(event.isAsCommand()) {
+            event.setMessage(message);
+            return;
+        }
 
         String format = plugin.getFormatter().format(sender, message);
         event.setFormat(format);

@@ -5,6 +5,7 @@ import me.yushust.cherrychat.ChatPlugin;
 import me.yushust.cherrychat.event.AsyncCherryChatEvent;
 import me.yushust.cherrychat.modules.AbstractChatPluginModule;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -19,7 +20,6 @@ public class PerWorldChatModule extends AbstractChatPluginModule {
     @Override
     public Consumer<AsyncCherryChatEvent> getChatConsumer() {
         return event -> {
-
             if(event.isCancelled()) return;
 
             boolean perWorldChatEnabled = plugin.getConfig().getBoolean("per-world-chat.enabled");
@@ -28,9 +28,10 @@ public class PerWorldChatModule extends AbstractChatPluginModule {
 
             Player player = event.getPlayer();
             event.getRecipients().clear();
-            getSharedWorlds(player.getWorld().getName()).stream().map(Bukkit::getWorld).forEach(world ->
-                event.getRecipients().addAll(world.getPlayers())
-            );
+            for(String worldName : getSharedWorlds(player.getWorld().getName())) {
+                World world = Bukkit.getWorld(worldName);
+                event.getRecipients().addAll(world.getPlayers());
+            }
         };
     }
 

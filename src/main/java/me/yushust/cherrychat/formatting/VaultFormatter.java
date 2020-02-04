@@ -7,7 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
-public class VaultFormatter extends AbstractFormatter {
+public class VaultFormatter extends DefaultFormatter {
 
     private Chat chatManager;
 
@@ -28,18 +28,6 @@ public class VaultFormatter extends AbstractFormatter {
             }
             this.chatManager = chat;
         }
-    }
-
-    @Override
-    public String format(Message message) {
-        return String.format(
-                Formatter.getDefaultFormat(),
-                message.getSender().getName(),
-                setPlaceholders(
-                        message.getSender(),
-                        message.getMessage()
-                )
-        );
     }
 
     @Override

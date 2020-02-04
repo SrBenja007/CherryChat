@@ -22,9 +22,7 @@ public class MongoConnectionManager {
     private MongoClient mongoClient;
     private Morphia morphia;
 
-    public MongoConnectionManager(String hostName, int port, String database) {
-        this(hostName, port, "", "", database);
-    }
+    private Datastore datastore;
 
     public void connect() {
         ServerAddress address = new ServerAddress(hostName, port);
@@ -45,7 +43,10 @@ public class MongoConnectionManager {
     }
 
     public Datastore getDatastore() {
-        return this.morphia.createDatastore(mongoClient, database);
+        if(datastore == null) {
+            datastore = this.morphia.createDatastore(mongoClient, database);
+        }
+        return datastore;
     }
 
 }

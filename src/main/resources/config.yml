@@ -37,9 +37,24 @@ storaging:
     password: ""
     database: "cherrychat"
 
+join-quit-messages:
+    join:
+        default: # priority is higher while the section is placed below
+            permission: "none"
+            message: "none"
+        vip:
+            permission: "cherrychat.vip"
+            message: "&5[CherryChat] &7%name% &fhas joined the game! &bIt's VIP!"
+    quit:
+        default:
+            permission: "none"
+            message: "none"
+        vip:
+            permission: "cherrychat.vip"
+            message: "&5[CherryChat] &7%name% &fleft the game :("
 
 per-world-chat:
-    enabled: true
+    enabled: false
     share:
         world:
         - "world_nether"
@@ -52,7 +67,7 @@ cooldown:
     #     <string>
     #     Players who have this permission will
     #     not have to wait to chat again
-    bypass-permission: ""
+    bypass-permission: "cherrychat.cooldown.bypass" # If "none" is placed, the cooldown is disabled for all players
     # Time Seconds
     #     <integer>
     #    The players must wait the specified
@@ -68,6 +83,7 @@ cooldown:
 #         ez => **
 blacklisted-words:
 - "noob"
+- "ez"
 
 # Minimum characters considered flood
 #     <integer>

@@ -3,6 +3,7 @@ package me.yushust.cherrychat.command;
 import com.google.common.base.Joiner;
 import lombok.Getter;
 import me.yushust.cherrychat.ChatPlugin;
+import me.yushust.cherrychat.model.User;
 import me.yushust.cherrychat.util.Configuration;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -46,6 +47,23 @@ public class MessagingCommands {
         if(targetName.equalsIgnoreCase(sender.getName())) {
             sender.sendMessage(language.getString("what"));
             return;
+        }
+
+        if(target instanceof Player && sender instanceof Player) {
+            Player playerTarget = (Player) target;
+            Player playerSender = (Player) sender;
+
+            User targetUser = plugin.getUserDataHandler().findSync(playerTarget.getUniqueId());
+            if(targetUser.getIgnoredPlayers().contains(playerSender.getUniqueId().toString())) {
+                playerSender.sendMessage(plugin.getLanguage().getString("ignored"));
+                return;
+            }
+
+            User senderUser = plugin.getUserDataHandler().findSync(playerSender.getUniqueId());
+            if(senderUser.getIgnoredPlayers().contains(playerTarget.getUniqueId().toString())) {
+                playerSender.sendMessage(plugin.getLanguage().getString("confused"));
+                return;
+            }
         }
 
         String rawMessage = Joiner.on(" ").join(Arrays.copyOfRange(args, 1, args.length));

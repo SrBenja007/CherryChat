@@ -9,7 +9,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 
-public abstract class AbstractDataHandler<T> implements DataHandler<T> {
+public abstract class AbstractDataHandler<T extends Identifiable> implements DataHandler<T> {
 
     protected final ListeningExecutorService executor = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(8));
     protected final Map<UUID, T> cache = new ConcurrentHashMap<>();
@@ -33,13 +33,14 @@ public abstract class AbstractDataHandler<T> implements DataHandler<T> {
     @Override
     public ListenableFuture<Void> save(T data) {
         return executor.submit(() -> {
+            cache.put(data.getId(), data);
             saveSync(data);
             return null;
         });
     }
 
     @Override
-    public ListenableFuture<Void> remove(T data) {
+    public ListenableFuture<Void> remove(UUID data) {
         return executor.submit(() -> {
             removeSync(data);
             return null;
@@ -55,7 +56,9 @@ public abstract class AbstractDataHandler<T> implements DataHandler<T> {
     public T refreshSync(UUID id) {
         T loaded = cache.get(id);
         if(loaded == null) {
-            loaded = defaultProvider.provide(id);
+            loaded = load(id);
+            if(loaded == null)
+                loaded = defaultProvider.provide(id);
         }
         saveSync(loaded);
         return loaded;
