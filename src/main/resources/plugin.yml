@@ -1,6 +1,0 @@
-name: CherryChat
-main: me.yushust.cherrychat.ChatPlugin
-version: 0.1.0
-softdepend: [Vault, PlaceholderAPI]
-description: An awesome Chat Plugin!
-authors: [Yusshu]

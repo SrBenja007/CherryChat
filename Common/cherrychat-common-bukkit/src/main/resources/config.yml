@@ -1,0 +1,180 @@
+#
+#    ___ _                        ___ _         _
+#  / __| |_  ___ _ _ _ _ _  _   / __| |_  __ _| |_
+# | (__| ' \/ -_) '_| '_| || | | (__| ' \/ _` |  _|
+#  \___|_||_\___|_| |_|  \_, |  \___|_||_\__,_|\__|
+#                        |__/
+#
+# Chat format
+#    <string>
+#    * You can use CherryChat placeholders
+#         %name% - The player name
+#         %displayname% - The player display name
+#         %message% - The message
+#
+#    * You can use Placeholder API placeholders (if enabled)
+#         Placeholder API extension cloud:
+#            https://api.extendedclip.com/all/
+#         To use a placeholder you must install the extension.
+#         Example:
+#             To use "%player_name%" placeholder, you must install
+#             the "Player" extension. (Command: /papi ecloud download <extension name>)
+#
+#    * You can use Vault placeholders (if enabled)
+#          %prefix% - The player prefix
+#          %suffix% - The player suffix
+#          %group% - The player group
+chat-format:
+    color-permission: "cherrychat.chat.color"
+    format: "&7%displayname% &8:: &7%message%"
+    mention: "&e@%name%&7"
+
+storaging:
+    type: "MONGODB" # Types: MongoDB, Yaml
+    host: "127.0.0.1"
+    port: 27017
+    username: ""
+    password: ""
+    database: "cherrychat"
+
+join-quit-messages:
+    join:
+        default: # priority is higher while the section is placed below
+            permission: "none"
+            message: "none"
+        vip:
+            permission: "cherrychat.vip"
+            message: "&5[CherryChat] &7%name% &fhas joined the game! &bIt's VIP!"
+    quit:
+        default:
+            permission: "none"
+            message: "none"
+        vip:
+            permission: "cherrychat.vip"
+            message: "&5[CherryChat] &7%name% &fleft the game :("
+
+per-world-chat:
+    enabled: false
+    share:
+        world:
+        - "world_nether"
+        - "world_the_end"
+
+# The chat cooldown
+#    Chat cooldown
+cooldown:
+    # The Bypass Permission
+    #     <string>
+    #     Players who have this permission will
+    #     not have to wait to chat again
+    bypass-permission: "cherrychat.cooldown.bypass" # If "none" is placed, the cooldown is disabled for all players
+    # Time Seconds
+    #     <integer>
+    #    The players must wait the specified
+    #    time (in seconds) to send a message again
+    time-seconds: 3
+
+# The blacklisted words
+#    <string list>
+#    Players should not send these words,
+#    but if they do, the words are censored.
+#    Example:
+#         noob => ****
+#         ez => **
+blacklisted-words:
+    suppressing-mode: "CENSOR" # Modes: CANCEL, CENSOR, WARNING, COMMAND (command cancels the message)
+    configuration:
+        cancel-message: "&cPlease be a good boy"
+        warning: "&cYou've been warned! %warns%/%max-warns%"
+        command: "msg %name% please be a good boy :("
+    list:
+    - "noob"
+    - "ez"
+
+warnings:
+    goals:
+        first:
+            warnings: 3
+            command: "mute %name% 2h Decision administrativa :v"
+        second:
+            warnings: 5
+            command: "tempban %name% 1d Decision administrativa :v"
+        third:
+            warnings: 7
+            command: "ban %name% Bad guy!"
+
+# Minimum characters considered flood
+#     <integer>
+#     Represents the minimum number of
+#     characters in a text that's considered flood
+min-chars-considered-flood: 5
+
+# Capitalize first letter
+#      <boolean>
+#      Do you want to capitalize the first letter
+#      of all messages?
+#          Example:
+#              hello world => Hello world
+capitalize-first-letter: true
+
+# Minimun capitalized characters
+#      <integer>
+#      Represents the minimum number of
+#      characters in a text. If exceeded,
+#      the filter acts.
+#           Example:
+#                HELLO WORLD => hello world
+min-capitalized-chars: 5
+
+custom-achievements-messages:
+    enabled: true
+    message: "&e>>> &8%name% &7just earned &8%achievement%&7!" # set to "none" to disable default achievement messages
+
+chat-commands:
+    # global:
+    #    args: 1 # Args sliced. For example: /global <message> ==> "global" is sliced.
+    message:
+        args: 2 # Example: /message Yusshu <message> ==> "message" and "Yusshu" are sliced. 2
+    msg:
+        args: 2
+    tell:
+        args: 2
+    r:
+        args: 1
+    whisper:
+        args: 2
+    re:
+        args: 1
+    reply:
+        args: 1
+
+message:
+    in: "&5[&7%s&5] &8-> &5[&7You&5]: &8%s"
+    out: "&5[&7You&5] &8-> &5[&7%s&5]: &8%s"
+    other: "&5[&7%s&5] &8-> &5[&7%s&5]: &8%s"
+    spy-permission: "cherrychat.spy"
+
+# Announcements
+#     The announcements are set here.
+#     This is how an announcement is created:
+#     example-announcement:
+#         json: <boolean> (This field indicates whether the text will be taken as JSON or as plain text) - OPTIONAL (default: false)
+#         text: <string list> (The texts) - REQUIRED
+#         period: <integer> (The time interval (in seconds) in which it will be announced) - OPTIONAL (default: 120 seconds)
+#         permission: <string> (The necessary permission to receive the announcement) - OPTIONAL (default: none)
+announcements:
+    example:
+        json: false
+        text:
+        - "&8-------------------------------------------"
+        - "&7 > Report bugs on https://discord.gg/Wf4xb78 <"
+        - "&8-------------------------------------------"
+        period: 120 # seconds
+        permission: "announce.receive.example"
+    json-example:
+        json: true
+        text:
+        - "{\"text\":\"&c&lReport hackers on https://discord.gg/Wf4xb78\"}"
+        period: 150
+
+# Congratulations! You finished the configuration
