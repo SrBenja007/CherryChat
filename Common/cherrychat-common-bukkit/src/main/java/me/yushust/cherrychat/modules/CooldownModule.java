@@ -1,5 +1,6 @@
 package me.yushust.cherrychat.modules;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import me.yushust.cherrychat.CherryChatPlugin;
 import me.yushust.cherrychat.api.bukkit.event.AsyncCherryChatEvent;
@@ -11,10 +12,11 @@ import org.bukkit.entity.Player;
 import java.text.DecimalFormat;
 import java.util.UUID;
 
-@RequiredArgsConstructor
+@RequiredArgsConstructor @Getter
 public class CooldownModule implements ChatPluginModule {
 
     private final CherryChatPlugin plugin;
+    private String moduleName = "cool-down";
     private CooldownHandler<UUID> cooldownHandler = new CachedCooldownHandler<>();
 
     @Override

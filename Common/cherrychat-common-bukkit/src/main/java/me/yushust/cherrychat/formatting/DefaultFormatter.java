@@ -6,10 +6,14 @@ import me.yushust.cherrychat.CherryChatPlugin;
 import me.yushust.cherrychat.api.bukkit.formatting.Formatter;
 import org.bukkit.entity.Player;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 @RequiredArgsConstructor
 public class DefaultFormatter implements Formatter {
 
     protected final CherryChatPlugin plugin;
+    private final Set<Formatter> formatters = new LinkedHashSet<>();
 
     @Override
     public String format(Player player, String message) {
@@ -31,6 +35,11 @@ public class DefaultFormatter implements Formatter {
             VaultFormatter vaultFormatter = new VaultFormatter(plugin);
             text = vaultFormatter.setPlaceholders(player, text);
         }
+
+        for(Formatter formatter : formatters) {
+            text = formatter.setPlaceholders(player, text);
+        }
+
         return text
                 .replace("%name%", player.getName())
                 .replace("%displayname%", player.getDisplayName());
@@ -38,7 +47,8 @@ public class DefaultFormatter implements Formatter {
 
     @Override
     public Formatter merge(Formatter otherFormatter) {
-        return new DefaultMergedFormatter(this).add(otherFormatter);
+        formatters.add(otherFormatter);
+        return this;
     }
 
 }

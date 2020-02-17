@@ -17,7 +17,6 @@ import me.yushust.cherrychat.manager.SimpleChatPluginModuleManager;
 import me.yushust.cherrychat.manager.SimpleCommandManager;
 import me.yushust.cherrychat.modules.*;
 import me.yushust.cherrychat.task.AnnouncerTask;
-import me.yushust.cherrychat.util.Announcement;
 import me.yushust.cherrychat.api.bukkit.util.Configuration;
 import me.yushust.cherrychat.util.Properties;
 import org.apache.logging.log4j.LogManager;
@@ -25,6 +24,7 @@ import org.apache.logging.log4j.core.Filter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -66,8 +66,6 @@ public final class CherryChatPlugin extends JavaPlugin implements ChatPlugin {
         org.apache.logging.log4j.core.Logger mainLogger = (org.apache.logging.log4j.core.Logger) LogManager.getRootLogger();
         mainLogger.addFilter(loggingFilter);
 
-        Bukkit.getServicesManager().register(ChatPlugin.class, this, this, ServicePriority.Highest);
-
         this.console = Bukkit.getConsoleSender();
         console.sendMessage("§e>>>");
         console.sendMessage("§e>>> §aEnabled §bCherryChat§a!");
@@ -81,6 +79,8 @@ public final class CherryChatPlugin extends JavaPlugin implements ChatPlugin {
         this.achievements = new Configuration(this, "achievements");
 
         this.storageMethod = StorageMethod.getByName(config.getString("storaging.type", "yaml"));
+
+        boolean integratedModules = config.getBoolean("modules.integrated-modules", false);
 
         if(config.getBoolean("custom-achievements-messages.enabled")){
             console.sendMessage("§e>>>");
@@ -96,30 +96,40 @@ public final class CherryChatPlugin extends JavaPlugin implements ChatPlugin {
             }
         }
 
-
         this.commandManager = new SimpleCommandManager(this);
-
         this.placeholderApiEnabled = getServer().getPluginManager().getPlugin("PlaceholderAPI") != null;
         this.vaultApiEnabled = getServer().getPluginManager().getPlugin("Vault") != null;
 
-        this.moduleManager = new SimpleChatPluginModuleManager();
+        this.moduleManager = new SimpleChatPluginModuleManager(
+                config.getStringList("modules.accepted-modules"),
+                console,
+                integratedModules
+        );
+
         this.formatter = new CherryChatFormatter(this);
         this.defaultFormatter = new DefaultFormatter(this);
 
-        getServer().getScheduler().runTaskTimerAsynchronously(this, new AnnouncerTask(), 0, 20);
-        Announcement.getAllFrom(config.getConfigurationSection("announcements")).forEach(Announcement::schedule);
+        AnnouncerTask.startScheduling(this, 20, config.getConfigurationSection("announcements"));
 
-        this.installModules();
+        if(!integratedModules) this.installModules();
 
         this.registerChatCommands();
         this.playersMoved = new HashSet<>();
 
         getServer().getPluginManager().registerEvents(new AchievementListener(this), this);
-        getServer().getPluginManager().registerEvents(new JoinListener(this), this);
-        getServer().getPluginManager().registerEvents(new QuitListener(this), this);
         getServer().getPluginManager().registerEvents(new MoveListener(this), this);
-        getServer().getPluginManager().registerEvents(new AsyncChatListener(this), this);
+        getServer().getPluginManager().registerEvents(new AsyncCherryChatCaller(), this);
+        getServer().getPluginManager().registerEvents(getChatListener(integratedModules), this);
         getServer().getPluginManager().registerEvents(new CommandListener(this), this);
+
+        Bukkit.getServicesManager().register(ChatPlugin.class, this, this, ServicePriority.Highest);
+    }
+
+    private Listener getChatListener(boolean integratedModules) {
+        if(integratedModules) {
+            return new IntegratedAsyncChatListener(this);
+        }
+        return new AsyncChatListener(this);
     }
 
     private void registerChatCommands() {
@@ -138,7 +148,7 @@ public final class CherryChatPlugin extends JavaPlugin implements ChatPlugin {
         moduleManager.install(new CapsFilterModule(this));
         moduleManager.install(new FloodFilterModule(this));
         moduleManager.install(new MentionsModule(this));
-        moduleManager.install(new DotModule());
+        moduleManager.install(new DotModule(this));
         moduleManager.install(new PerWorldChatModule(this));
     }
 

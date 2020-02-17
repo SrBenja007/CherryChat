@@ -15,12 +15,15 @@ public class ChatCommand {
     private int slicedArguments;
 
     public String setMessage(String format, String message) {
-        String[] args = Arrays.copyOfRange(format.split(" "), 0, slicedArguments);
-        return Joiner.on(" ").join(args) + " " + message;
+        String[] args = format.split(" ");
+        if(args.length < slicedArguments) return format;
+        String[] argsSliced = Arrays.copyOfRange(args, 0, slicedArguments);
+        return Joiner.on(" ").join(argsSliced) + " " + message;
     }
 
     public String getMessage(String format) {
         String[] args = format.split(" ");
+        if(args.length < slicedArguments) return format;
         return Joiner.on(" ").join(Arrays.copyOfRange(args, slicedArguments, args.length));
     }
 

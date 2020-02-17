@@ -10,15 +10,14 @@ public class CachedCooldownHandler<T> implements CooldownHandler<T> {
     @Override
     public void addToCooldown(T value, long millis) {
         if(!cooldownCache.containsKey(value)) {
-            cooldownCache.put(value, millis);
+            cooldownCache.put(value, System.currentTimeMillis() + millis);
         }
     }
 
     @Override
     public boolean isInCooldown(T value) {
-        long currentMillis = System.currentTimeMillis();
         long expired = getCooldown(value);
-        if(expired <= currentMillis) {
+        if(expired <= 0) {
             cooldownCache.remove(value);
             return false;
         }
@@ -27,7 +26,8 @@ public class CachedCooldownHandler<T> implements CooldownHandler<T> {
 
     @Override
     public long getCooldown(T value) {
-        return cooldownCache.getOrDefault(value, -1L);
+        long currentMillis = System.currentTimeMillis();
+        return cooldownCache.getOrDefault(value, currentMillis) - currentMillis;
     }
 
 }

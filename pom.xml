@@ -7,13 +7,11 @@
     <groupId>me.yushust</groupId>
     <artifactId>BetterCherryChat</artifactId>
     <packaging>pom</packaging>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
 
     <modules>
         <module>API</module>
         <module>Common</module>
-        <module>Addon</module>
-        <module>cherrychat-common</module>
     </modules>
 
 </project>

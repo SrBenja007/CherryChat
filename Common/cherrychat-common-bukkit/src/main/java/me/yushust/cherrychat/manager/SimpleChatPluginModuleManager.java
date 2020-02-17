@@ -3,10 +3,15 @@ package me.yushust.cherrychat.manager;
 import me.yushust.cherrychat.api.bukkit.event.AsyncCherryChatEvent;
 import me.yushust.cherrychat.api.bukkit.module.ChatPluginModule;
 import me.yushust.cherrychat.api.bukkit.module.ChatPluginModuleManager;
+import org.bukkit.command.CommandSender;
 
 import java.util.*;
 
 public class SimpleChatPluginModuleManager implements ChatPluginModuleManager {
+
+    private final List<String> acceptedModules;
+    private final CommandSender console;
+    private boolean integratedModules;
 
     // negative -> first argument < second argument
     // zero -> first argument == second argument
@@ -22,6 +27,12 @@ public class SimpleChatPluginModuleManager implements ChatPluginModuleManager {
         return 0;
     });
 
+    public SimpleChatPluginModuleManager(List<String> acceptedModules, CommandSender console, boolean integratedModules) {
+        this.acceptedModules = acceptedModules;
+        this.console = console;
+        this.integratedModules = integratedModules;
+    }
+
     @Override
     public Set<ChatPluginModule> getRegistrations() {
         return new HashSet<>(modules);
@@ -29,19 +40,40 @@ public class SimpleChatPluginModuleManager implements ChatPluginModuleManager {
 
     @Override
     public void install(ChatPluginModule module) {
-        modules.add(module);
+        String pluginName = module.getPlugin().getName();
+        String moduleName = module.getModuleName();
+
+        if(integratedModules) {
+            console.sendMessage("§e>>> §cDenegated access for module " + moduleName + ". Reason: 'integrated modules' is enabled");
+            return;
+        }
+
+        if(acceptedModules.contains(
+                pluginName.toLowerCase() + ":" + moduleName.toLowerCase()
+        )) {
+            console.sendMessage("§e>>> §aRegistered module " + moduleName + " of plugin " + pluginName);
+            modules.add(module);
+        } else {
+            console.sendMessage("§e>>> §cDenegated access for module " + moduleName + ". Reason: Accepted modules doesn't contains this module.");
+        }
     }
 
     @Override
     public void handleChat(AsyncCherryChatEvent event) {
         for(ChatPluginModule module : modules) {
-            module.onChat(event);
+            if(acceptedModules.contains(
+                    module.getPlugin().getName().toLowerCase() + ":" + module.getModuleName()
+            )) {
+                module.onChat(event);
+            }
         }
     }
 
     @Override
     public void install(ChatPluginModuleManager modules) {
-        this.modules.addAll(modules.getRegistrations());
+        for(ChatPluginModule module : modules.getRegistrations()) {
+            this.install(module);
+        }
     }
 
 }

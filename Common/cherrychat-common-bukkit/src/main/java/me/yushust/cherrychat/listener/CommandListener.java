@@ -3,7 +3,7 @@ package me.yushust.cherrychat.listener;
 import lombok.RequiredArgsConstructor;
 import me.yushust.cherrychat.CherryChatPlugin;
 import me.yushust.cherrychat.formatting.ChatCommand;
-import me.yushust.cherrychat.event.AsyncCherryChatEvent;
+import me.yushust.cherrychat.api.bukkit.event.AsyncCherryChatEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

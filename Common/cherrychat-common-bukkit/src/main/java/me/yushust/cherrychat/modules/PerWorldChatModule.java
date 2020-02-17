@@ -1,5 +1,6 @@
 package me.yushust.cherrychat.modules;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import me.yushust.cherrychat.CherryChatPlugin;
 import me.yushust.cherrychat.api.bukkit.event.AsyncCherryChatEvent;
@@ -11,11 +12,11 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-@RequiredArgsConstructor
+@RequiredArgsConstructor @Getter
 public class PerWorldChatModule implements ChatPluginModule {
 
     private final CherryChatPlugin plugin;
-
+    private String moduleName = "per-world-chat";
 
     private List<String> getSharedWorlds(String world) {
         List<String> sharedWorlds = plugin.getConfig().getStringList("per-world-chat.share." + world, new ArrayList<>());

@@ -36,6 +36,6 @@ public class SimpleCommandManager implements CommandManager {
     @Override
     public void registerCommands(BiConsumer<CommandSender, String[]> command, String... names) {
         commandMap.register(names[0], plugin.getName(), new BukkitCommandWrapper(command, names));
-        Bukkit.getConsoleSender().sendMessage("§e>>> §7Registered command \"" + names[0] + "\"");
+        Bukkit.getConsoleSender().sendMessage("§e>>> §aRegistered command \"" + names[0] + "\"");
     }
 }
