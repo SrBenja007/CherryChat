@@ -30,7 +30,6 @@ chat-format:
     mention: "&e@%name%&7"
 
 modules:
-    integrated-modules: false # True si módulos externos no pueden ser aceptados, chat más rápido, invalida "accepted-modules"
     accepted-modules:
     - "cherrychat:anti-bot-spam"
     - "cherrychat:caps-filter"
@@ -39,8 +38,6 @@ modules:
     - "cherrychat:flood-filter"
     - "cherrychat:mentions"
     - "cherrychat:per-world-chat"
-    - "cherrychatdata:blacklist"
-    - "cherrychatdata:ignored-players"
 
 per-world-chat:
     enabled: false

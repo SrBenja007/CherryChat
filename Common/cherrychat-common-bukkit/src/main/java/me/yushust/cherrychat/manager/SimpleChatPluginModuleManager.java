@@ -11,31 +11,28 @@ public class SimpleChatPluginModuleManager implements ChatPluginModuleManager {
 
     private final List<String> acceptedModules;
     private final CommandSender console;
-    private boolean integratedModules;
 
-    // negative -> first argument < second argument
-    // zero -> first argument == second argument
-    // positive -> first argument > second argument
-    private final Queue<ChatPluginModule> modules = new PriorityQueue<>(15, (module, otherModule) -> {
+
+    private final List<ChatPluginModule> moduleList = new ArrayList<>();
+    private final Comparator<ChatPluginModule> chatPluginModuleComparator = (module, otherModule) -> {
 
         if(module.getPriority().getPriority() > otherModule.getPriority().getPriority()) {
             return 1;
         } else if (module.getPriority().getPriority() < otherModule.getPriority().getPriority()) {
             return -1;
         }
-
         return 0;
-    });
 
-    public SimpleChatPluginModuleManager(List<String> acceptedModules, CommandSender console, boolean integratedModules) {
+    };
+
+    public SimpleChatPluginModuleManager(List<String> acceptedModules, CommandSender console) {
         this.acceptedModules = acceptedModules;
         this.console = console;
-        this.integratedModules = integratedModules;
     }
 
     @Override
     public Set<ChatPluginModule> getRegistrations() {
-        return new HashSet<>(modules);
+        return new HashSet<>(moduleList);
     }
 
     @Override
@@ -43,16 +40,12 @@ public class SimpleChatPluginModuleManager implements ChatPluginModuleManager {
         String pluginName = module.getPlugin().getName();
         String moduleName = module.getModuleName();
 
-        if(integratedModules) {
-            console.sendMessage("§e>>> §cDenegated access for module " + moduleName + ". Reason: 'integrated modules' is enabled");
-            return;
-        }
-
         if(acceptedModules.contains(
                 pluginName.toLowerCase() + ":" + moduleName.toLowerCase()
         )) {
+            moduleList.add(module);
+            moduleList.sort(chatPluginModuleComparator);
             console.sendMessage("§e>>> §aRegistered module " + moduleName + " of plugin " + pluginName);
-            modules.add(module);
         } else {
             console.sendMessage("§e>>> §cDenegated access for module " + moduleName + ". Reason: Accepted modules doesn't contains this module.");
         }
@@ -60,12 +53,8 @@ public class SimpleChatPluginModuleManager implements ChatPluginModuleManager {
 
     @Override
     public void handleChat(AsyncCherryChatEvent event) {
-        for(ChatPluginModule module : modules) {
-            if(acceptedModules.contains(
-                    module.getPlugin().getName().toLowerCase() + ":" + module.getModuleName()
-            )) {
-                module.onChat(event);
-            }
+        for(ChatPluginModule module : moduleList) {
+            module.onChat(event);
         }
     }
 

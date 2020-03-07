@@ -24,7 +24,6 @@ import org.apache.logging.log4j.core.Filter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -80,8 +79,6 @@ public final class CherryChatPlugin extends JavaPlugin implements ChatPlugin {
 
         this.storageMethod = StorageMethod.getByName(config.getString("storaging.type", "yaml"));
 
-        boolean integratedModules = config.getBoolean("modules.integrated-modules", false);
-
         if(config.getBoolean("custom-achievements-messages.enabled")){
             console.sendMessage("§e>>>");
             console.sendMessage("§e>>> §aSetting announce-player-achievements from server.properties to false");
@@ -92,7 +89,8 @@ public final class CherryChatPlugin extends JavaPlugin implements ChatPlugin {
                 console.sendMessage("§e>>> §aSuccess!");
                 console.sendMessage("§e>>>");
             } catch (Exception exception) {
-                exception.printStackTrace();
+                console.sendMessage("§e>>> §cCouldn't set announce-player-achievements to false :(");
+                console.sendMessage("§e>>>");
             }
         }
 
@@ -102,8 +100,7 @@ public final class CherryChatPlugin extends JavaPlugin implements ChatPlugin {
 
         this.moduleManager = new SimpleChatPluginModuleManager(
                 config.getStringList("modules.accepted-modules"),
-                console,
-                integratedModules
+                console
         );
 
         this.formatter = new CherryChatFormatter(this);
@@ -111,25 +108,18 @@ public final class CherryChatPlugin extends JavaPlugin implements ChatPlugin {
 
         AnnouncerTask.startScheduling(this, 20, config.getConfigurationSection("announcements"));
 
-        if(!integratedModules) this.installModules();
-
+        this.installModules();
         this.registerChatCommands();
+
         this.playersMoved = new HashSet<>();
 
         getServer().getPluginManager().registerEvents(new AchievementListener(this), this);
         getServer().getPluginManager().registerEvents(new MoveListener(this), this);
         getServer().getPluginManager().registerEvents(new AsyncCherryChatCaller(), this);
-        getServer().getPluginManager().registerEvents(getChatListener(integratedModules), this);
+        getServer().getPluginManager().registerEvents(new AsyncChatListener(this), this);
         getServer().getPluginManager().registerEvents(new CommandListener(this), this);
 
         Bukkit.getServicesManager().register(ChatPlugin.class, this, this, ServicePriority.Highest);
-    }
-
-    private Listener getChatListener(boolean integratedModules) {
-        if(integratedModules) {
-            return new IntegratedAsyncChatListener(this);
-        }
-        return new AsyncChatListener(this);
     }
 
     private void registerChatCommands() {
