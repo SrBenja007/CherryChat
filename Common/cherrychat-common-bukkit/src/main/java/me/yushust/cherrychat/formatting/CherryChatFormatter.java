@@ -11,7 +11,7 @@ public class CherryChatFormatter extends DefaultFormatter {
 
     @Override
     public String format(Player player, String message) {
-        return this.format(player, plugin.getConfig().getString("chat-format.format"), "%2$s");
+        return this.format(player, plugin.getConfig().getString("chat-format.format"), message);
     }
 
 }

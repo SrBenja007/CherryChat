@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.yushust.cherrychat.CherryChatPlugin;
 import me.yushust.cherrychat.api.bukkit.formatting.Formatter;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.LinkedHashSet;
@@ -18,6 +19,10 @@ public class DefaultFormatter implements Formatter {
     @Override
     public String format(Player player, String message) {
         return format(player, "%name%: %message%", message);
+    }
+
+    protected final String colorize(String text) {
+        return ChatColor.translateAlternateColorCodes('&', text);
     }
 
     protected final String format(Player player, String format, String message) {

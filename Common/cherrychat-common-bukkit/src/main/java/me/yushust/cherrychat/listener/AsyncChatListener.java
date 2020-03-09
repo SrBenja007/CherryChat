@@ -34,7 +34,10 @@ public class AsyncChatListener implements Listener {
         }
 
         String format = plugin.getFormatter().format(sender, message);
-        event.setFormat(format);
+
+        // confusing lines xD
+        event.setFormat("%2$s");
+        event.setMessage(format);
     }
 
 }
