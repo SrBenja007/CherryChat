@@ -140,6 +140,7 @@ public final class CherryChatPlugin extends JavaPlugin implements ChatPlugin {
         moduleManager.install(new MentionsModule(this));
         moduleManager.install(new DotModule(this));
         moduleManager.install(new PerWorldChatModule(this));
+        moduleManager.install(new RadialChatModule(this));
     }
 
     @Override

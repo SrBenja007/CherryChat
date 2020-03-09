@@ -1,23 +1,34 @@
 package me.yushust.cherrychat.modules;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import me.yushust.cherrychat.CherryChatPlugin;
 import me.yushust.cherrychat.api.bukkit.event.AsyncCherryChatEvent;
 import me.yushust.cherrychat.api.bukkit.handler.CachedCooldownHandler;
 import me.yushust.cherrychat.api.bukkit.handler.CooldownHandler;
 import me.yushust.cherrychat.api.bukkit.module.ChatPluginModule;
+import me.yushust.cherrychat.api.bukkit.util.Configuration;
 import org.bukkit.entity.Player;
 
 import java.text.DecimalFormat;
 import java.util.UUID;
 
-@RequiredArgsConstructor @Getter
+@Getter
 public class CooldownModule implements ChatPluginModule {
 
-    private final CherryChatPlugin plugin;
+    private CherryChatPlugin plugin;
     private String moduleName = "cool-down";
+    private String cooldownBypassPermission;
+    private int cooldownSeconds;
     private CooldownHandler<UUID> cooldownHandler = new CachedCooldownHandler<>();
+    private String cooldownMessage;
+
+    public CooldownModule(CherryChatPlugin plugin) {
+        Configuration config = plugin.getConfig();
+        this.plugin = plugin;
+        this.cooldownBypassPermission = config.getString("cooldown.bypass-permission", "none");
+        this.cooldownSeconds = config.getInt("cooldown.time-seconds");
+        this.cooldownMessage = plugin.getLanguage().getString("you-are-in-cooldown");
+    }
 
     @Override
     public void onChat(AsyncCherryChatEvent event) {
@@ -25,7 +36,6 @@ public class CooldownModule implements ChatPluginModule {
 
         Player player = event.getPlayer();
 
-        String cooldownBypassPermission = plugin.getConfig().getString("cooldown.bypass-permission", "none");
         if(cooldownBypassPermission.equals("none") || player.hasPermission(cooldownBypassPermission)) {
             return;
         }
@@ -34,12 +44,12 @@ public class CooldownModule implements ChatPluginModule {
             long cooldown = cooldownHandler.getCooldown(player.getUniqueId());
             double cooldownInSeconds = cooldown / 1000D;
             DecimalFormat format = new DecimalFormat("0.00");
-            player.sendMessage(plugin.getLanguage().getString("you-are-in-cooldown")
+            player.sendMessage(cooldownMessage
                     .replace("%cooldown%", format.format(cooldownInSeconds)));
             event.setCancelled(true);
             return;
         }
 
-        cooldownHandler.addToCooldown(player.getUniqueId(), plugin.getConfig().getInt("cooldown.time-seconds") * 1000L);
+        cooldownHandler.addToCooldown(player.getUniqueId(), cooldownSeconds * 1000L);
     }
 }

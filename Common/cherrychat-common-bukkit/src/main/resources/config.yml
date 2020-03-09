@@ -38,6 +38,16 @@ modules:
     - "cherrychat:flood-filter"
     - "cherrychat:mentions"
     - "cherrychat:per-world-chat"
+    - "cherrychat:radial-chat"
+
+radial-chat:
+    enabled: false
+# Directly
+#   radius: 50
+    radius:
+        x: 50 # Default 100
+        y: 256 # Default 100
+        z: 50 # Default 100
 
 per-world-chat:
     enabled: false

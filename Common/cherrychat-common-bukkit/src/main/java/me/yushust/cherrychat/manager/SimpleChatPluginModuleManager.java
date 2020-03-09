@@ -46,8 +46,6 @@ public class SimpleChatPluginModuleManager implements ChatPluginModuleManager {
             moduleList.add(module);
             moduleList.sort(chatPluginModuleComparator);
             console.sendMessage("§e>>> §aRegistered module " + moduleName + " of plugin " + pluginName);
-        } else {
-            console.sendMessage("§e>>> §cDenegated access for module " + moduleName + ". Reason: Accepted modules doesn't contains this module.");
         }
     }
 

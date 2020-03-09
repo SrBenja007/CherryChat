@@ -1,19 +1,23 @@
 package me.yushust.cherrychat.modules;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import me.yushust.cherrychat.CherryChatPlugin;
 import me.yushust.cherrychat.api.bukkit.event.AsyncCherryChatEvent;
 import me.yushust.cherrychat.api.bukkit.module.ChatPluginModule;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
-@RequiredArgsConstructor @Getter
+@Getter
 public class MentionsModule implements ChatPluginModule {
 
-    private final CherryChatPlugin plugin;
+    private CherryChatPlugin plugin;
     private String moduleName = "mentions";
+    private String mentionFormat;
+
+    public MentionsModule(CherryChatPlugin plugin) {
+        this.plugin = plugin;
+        this.mentionFormat = plugin.getConfig().getString("chat-format.mention");
+    }
 
     @Override
     public void onChat(AsyncCherryChatEvent event) {
@@ -23,7 +27,7 @@ public class MentionsModule implements ChatPluginModule {
 
         for(Player player : Bukkit.getOnlinePlayers()) {
             if(player.getUniqueId().equals(event.getPlayer().getUniqueId())) continue;
-            String mentionFormat = plugin.getConfig().getString("chat-format.mention").replace("%name%", player.getName());
+            String mentionFormat = this.mentionFormat.replace("%name%", player.getName());
             message = message.replace(player.getName(), mentionFormat);
         }
 

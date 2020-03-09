@@ -5,29 +5,36 @@ import lombok.RequiredArgsConstructor;
 import me.yushust.cherrychat.CherryChatPlugin;
 import me.yushust.cherrychat.api.bukkit.event.AsyncCherryChatEvent;
 import me.yushust.cherrychat.api.bukkit.module.ChatPluginModule;
+import me.yushust.cherrychat.api.bukkit.util.Configuration;
 import me.yushust.cherrychat.util.Texts;
 
-@RequiredArgsConstructor @Getter
+@Getter
 public class CapsFilterModule implements ChatPluginModule {
 
-    private final CherryChatPlugin plugin;
+    private CherryChatPlugin plugin;
     private String moduleName = "caps-filter";
+    private boolean capitalizeFirst;
+    private int minCapitalizedChars;
+
+    public CapsFilterModule(CherryChatPlugin plugin) {
+        Configuration config = plugin.getConfig();
+        this.plugin = plugin;
+        this.capitalizeFirst = config.getBoolean("capitalize-first-letter");
+        this.minCapitalizedChars = config.getInt("min-capitalized-chars");
+    }
 
     @Override
     public void onChat(AsyncCherryChatEvent event) {
         if(event.isCancelled()) return;
 
-        boolean capitalizeFirstLetter = plugin.getConfig().getBoolean("capitalize-first-letter");
-
         String message = event.getMessage();
-        int minCapitalizedChars = plugin.getConfig().getInt("min-capitalized-chars");
 
         message = Texts.toLowerCase(
                 message,
                 minCapitalizedChars
         );
 
-        if(capitalizeFirstLetter) {
+        if(capitalizeFirst) {
             message = Texts.capitalizeFirst(message);
         }
 

@@ -10,33 +10,44 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-@RequiredArgsConstructor @Getter
+@Getter
 public class PerWorldChatModule implements ChatPluginModule {
 
-    private final CherryChatPlugin plugin;
+    private Map<String, List<String>> sharedWorlds = new HashMap<>();
+    private CherryChatPlugin plugin;
+    private boolean enabled;
     private String moduleName = "per-world-chat";
 
-    private List<String> getSharedWorlds(String world) {
-        List<String> sharedWorlds = plugin.getConfig().getStringList("per-world-chat.share." + world, new ArrayList<>());
-        sharedWorlds.add(world);
-        return sharedWorlds;
+    public PerWorldChatModule(CherryChatPlugin plugin) {
+        this.plugin = plugin;
+        this.enabled = plugin.getConfig().getBoolean("per-world-chat.enabled", false);
     }
 
     @Override
     public void onChat(AsyncCherryChatEvent event) {
+        if(!enabled) return;
         if(event.isCancelled()) return;
 
-        boolean perWorldChatEnabled = plugin.getConfig().getBoolean("per-world-chat.enabled");
-
-        if(!perWorldChatEnabled) return;
-
         Player player = event.getPlayer();
+
         event.getRecipients().clear();
+
         for(String worldName : getSharedWorlds(player.getWorld().getName())) {
             World world = Bukkit.getWorld(worldName);
             event.getRecipients().addAll(world.getPlayers());
         }
     }
+
+    private List<String> getSharedWorlds(String world) {
+        if(sharedWorlds.containsKey(world)) return sharedWorlds.get(world);
+        List<String> sharings = plugin.getConfig().getStringList("per-world-chat.share." + world, new ArrayList<>());
+        sharings.add(world);
+        this.sharedWorlds.put(world, sharings);
+        return sharings;
+    }
+
 }
