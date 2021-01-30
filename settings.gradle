@@ -1,0 +1,10 @@
+rootProject.name = 'c-hat'
+
+// include sub-projects and prepend the root project name
+[
+    'api',
+    'plugin'
+].forEach {
+  include it
+  findProject(':' + it)?.name = 'c-hat-' + it
+}
