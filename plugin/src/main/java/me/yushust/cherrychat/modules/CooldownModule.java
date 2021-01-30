@@ -2,10 +2,8 @@ package me.yushust.cherrychat.modules;
 
 import lombok.Getter;
 import me.yushust.cherrychat.CherryChatPlugin;
-import me.yushust.cherrychat.api.bukkit.event.AsyncCherryChatEvent;
-import me.yushust.cherrychat.api.bukkit.handler.CachedCooldownHandler;
-import me.yushust.cherrychat.api.bukkit.handler.CooldownHandler;
-import me.yushust.cherrychat.api.bukkit.module.ChatPluginModule;
+import me.yushust.cherrychat.api.bukkit.event.AsyncUserChatEvent;
+import me.yushust.cherrychat.api.bukkit.intercept.MessageInterceptor;
 import me.yushust.cherrychat.api.bukkit.util.Configuration;
 import org.bukkit.entity.Player;
 
@@ -13,7 +11,7 @@ import java.text.DecimalFormat;
 import java.util.UUID;
 
 @Getter
-public class CooldownModule implements ChatPluginModule {
+public class CooldownModule implements MessageInterceptor {
 
     private CherryChatPlugin plugin;
     private String moduleName = "cool-down";
@@ -31,7 +29,7 @@ public class CooldownModule implements ChatPluginModule {
     }
 
     @Override
-    public void onChat(AsyncCherryChatEvent event) {
+    public void onChat(AsyncUserChatEvent event) {
         if(event.isCancelled()) return;
 
         Player player = event.getPlayer();

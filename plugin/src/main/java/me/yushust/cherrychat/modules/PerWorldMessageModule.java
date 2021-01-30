@@ -3,8 +3,8 @@ package me.yushust.cherrychat.modules;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import me.yushust.cherrychat.CherryChatPlugin;
-import me.yushust.cherrychat.api.bukkit.event.AsyncCherryChatEvent;
-import me.yushust.cherrychat.api.bukkit.module.ChatPluginModule;
+import me.yushust.cherrychat.api.bukkit.event.AsyncUserChatEvent;
+import me.yushust.cherrychat.api.bukkit.intercept.MessageInterceptor;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -15,20 +15,20 @@ import java.util.List;
 import java.util.Map;
 
 @Getter
-public class PerWorldChatModule implements ChatPluginModule {
+public class PerWorldMessageModule implements MessageInterceptor {
 
     private Map<String, List<String>> sharedWorlds = new HashMap<>();
     private CherryChatPlugin plugin;
     private boolean enabled;
     private String moduleName = "per-world-chat";
 
-    public PerWorldChatModule(CherryChatPlugin plugin) {
+    public PerWorldMessageModule(CherryChatPlugin plugin) {
         this.plugin = plugin;
         this.enabled = plugin.getConfig().getBoolean("per-world-chat.enabled", false);
     }
 
     @Override
-    public void onChat(AsyncCherryChatEvent event) {
+    public void onChat(AsyncUserChatEvent event) {
         if(!enabled) return;
         if(event.isCancelled()) return;
 

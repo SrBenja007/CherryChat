@@ -4,10 +4,7 @@ import com.google.common.base.Joiner;
 import lombok.Getter;
 import lombok.Setter;
 import me.yushust.cherrychat.api.bukkit.ChatPlugin;
-import me.yushust.cherrychat.api.bukkit.formatting.Formatter;
-import me.yushust.cherrychat.api.bukkit.handler.CommandManager;
-import me.yushust.cherrychat.api.bukkit.module.ChatPluginModuleManager;
-import me.yushust.cherrychat.api.bukkit.storage.StorageMethod;
+import me.yushust.cherrychat.api.bukkit.format.PlaceholderReplacer;
 import me.yushust.cherrychat.formatting.ChatCommand;
 import me.yushust.cherrychat.formatting.CherryChatFormatter;
 import me.yushust.cherrychat.formatting.DefaultFormatter;
@@ -48,8 +45,8 @@ public final class CherryChatPlugin extends JavaPlugin implements ChatPlugin {
     private CommandManager commandManager;
     private ChatPluginModuleManager moduleManager;
 
-    private Formatter formatter;
-    private Formatter defaultFormatter;
+    private PlaceholderReplacer formatter;
+    private PlaceholderReplacer defaultFormatter;
 
     private StorageMethod storageMethod;
 
@@ -139,8 +136,8 @@ public final class CherryChatPlugin extends JavaPlugin implements ChatPlugin {
         moduleManager.install(new FloodFilterModule(this));
         moduleManager.install(new MentionsModule(this));
         moduleManager.install(new DotModule(this));
-        moduleManager.install(new PerWorldChatModule(this));
-        moduleManager.install(new RadialChatModule(this));
+        moduleManager.install(new PerWorldMessageModule(this));
+        moduleManager.install(new RadialMessageModule(this));
     }
 
     @Override

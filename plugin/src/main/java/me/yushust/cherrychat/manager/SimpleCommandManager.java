@@ -1,7 +1,6 @@
 package me.yushust.cherrychat.manager;
 
 import lombok.Getter;
-import me.yushust.cherrychat.api.bukkit.handler.CommandManager;
 import me.yushust.cherrychat.util.BukkitCommandWrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;

@@ -1,6 +1,6 @@
 package me.yushust.cherrychat.listener;
 
-import me.yushust.cherrychat.api.bukkit.event.AsyncCherryChatEvent;
+import me.yushust.cherrychat.api.bukkit.event.AsyncUserChatEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -14,7 +14,7 @@ public class AsyncCherryChatCaller implements Listener {
         if(event.isCancelled()) {
             return;
         }
-        AsyncCherryChatEvent cherryChatEvent = new AsyncCherryChatEvent(
+        AsyncUserChatEvent cherryChatEvent = new AsyncUserChatEvent(
                 event.isAsynchronous(),
                 event.getPlayer(),
                 event.getMessage(),

@@ -2,7 +2,7 @@ package me.yushust.cherrychat.listener;
 
 import lombok.RequiredArgsConstructor;
 import me.yushust.cherrychat.CherryChatPlugin;
-import me.yushust.cherrychat.api.bukkit.event.AsyncCherryChatEvent;
+import me.yushust.cherrychat.api.bukkit.event.AsyncUserChatEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,7 +15,7 @@ public class AsyncChatListener implements Listener {
     private final CherryChatPlugin plugin;
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onCherryChat(AsyncCherryChatEvent event) {
+    public void onCherryChat(AsyncUserChatEvent event) {
         if(event.isCancelled()) return;
 
         Player sender = event.getPlayer();

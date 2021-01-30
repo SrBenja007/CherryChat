@@ -1,8 +1,7 @@
 package me.yushust.cherrychat.manager;
 
-import me.yushust.cherrychat.api.bukkit.event.AsyncCherryChatEvent;
-import me.yushust.cherrychat.api.bukkit.module.ChatPluginModule;
-import me.yushust.cherrychat.api.bukkit.module.ChatPluginModuleManager;
+import me.yushust.cherrychat.api.bukkit.event.AsyncUserChatEvent;
+import me.yushust.cherrychat.api.bukkit.intercept.MessageInterceptor;
 import org.bukkit.command.CommandSender;
 
 import java.util.*;
@@ -13,8 +12,8 @@ public class SimpleChatPluginModuleManager implements ChatPluginModuleManager {
     private final CommandSender console;
 
 
-    private final List<ChatPluginModule> moduleList = new ArrayList<>();
-    private final Comparator<ChatPluginModule> chatPluginModuleComparator = (module, otherModule) -> {
+    private final List<MessageInterceptor> moduleList = new ArrayList<>();
+    private final Comparator<MessageInterceptor> chatPluginModuleComparator = (module, otherModule) -> {
 
         if(module.getPriority().getPriority() > otherModule.getPriority().getPriority()) {
             return 1;
@@ -31,12 +30,12 @@ public class SimpleChatPluginModuleManager implements ChatPluginModuleManager {
     }
 
     @Override
-    public Set<ChatPluginModule> getRegistrations() {
+    public Set<MessageInterceptor> getRegistrations() {
         return new HashSet<>(moduleList);
     }
 
     @Override
-    public void install(ChatPluginModule module) {
+    public void install(MessageInterceptor module) {
         String pluginName = module.getPlugin().getName();
         String moduleName = module.getModuleName();
 
@@ -50,15 +49,15 @@ public class SimpleChatPluginModuleManager implements ChatPluginModuleManager {
     }
 
     @Override
-    public void handleChat(AsyncCherryChatEvent event) {
-        for(ChatPluginModule module : moduleList) {
+    public void handleChat(AsyncUserChatEvent event) {
+        for(MessageInterceptor module : moduleList) {
             module.onChat(event);
         }
     }
 
     @Override
     public void install(ChatPluginModuleManager modules) {
-        for(ChatPluginModule module : modules.getRegistrations()) {
+        for(MessageInterceptor module : modules.getRegistrations()) {
             this.install(module);
         }
     }

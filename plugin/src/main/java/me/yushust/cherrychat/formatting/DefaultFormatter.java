@@ -3,7 +3,7 @@ package me.yushust.cherrychat.formatting;
 import lombok.RequiredArgsConstructor;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.yushust.cherrychat.CherryChatPlugin;
-import me.yushust.cherrychat.api.bukkit.formatting.Formatter;
+import me.yushust.cherrychat.api.bukkit.format.PlaceholderReplacer;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -11,10 +11,10 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @RequiredArgsConstructor
-public class DefaultFormatter implements Formatter {
+public class DefaultFormatter implements PlaceholderReplacer {
 
     protected final CherryChatPlugin plugin;
-    private final Set<Formatter> formatters = new LinkedHashSet<>();
+    private final Set<PlaceholderReplacer> formatters = new LinkedHashSet<>();
 
     @Override
     public String format(Player player, String message) {
@@ -41,7 +41,7 @@ public class DefaultFormatter implements Formatter {
             text = vaultFormatter.setPlaceholders(player, text);
         }
 
-        for(Formatter formatter : formatters) {
+        for(PlaceholderReplacer formatter : formatters) {
             text = formatter.setPlaceholders(player, text);
         }
 
@@ -51,7 +51,7 @@ public class DefaultFormatter implements Formatter {
     }
 
     @Override
-    public Formatter merge(Formatter otherFormatter) {
+    public PlaceholderReplacer merge(PlaceholderReplacer otherFormatter) {
         formatters.add(otherFormatter);
         return this;
     }

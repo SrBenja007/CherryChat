@@ -1,9 +1,6 @@
 package me.yushust.cherrychat.api.bukkit;
 
-import me.yushust.cherrychat.api.bukkit.formatting.Formatter;
-import me.yushust.cherrychat.api.bukkit.handler.CommandManager;
-import me.yushust.cherrychat.api.bukkit.module.ChatPluginModuleManager;
-import me.yushust.cherrychat.api.bukkit.storage.StorageMethod;
+import me.yushust.cherrychat.api.bukkit.format.PlaceholderReplacer;
 import me.yushust.cherrychat.api.bukkit.util.Configuration;
 
 public interface ChatPlugin {
@@ -26,8 +23,8 @@ public interface ChatPlugin {
 
     Configuration getLanguage();
 
-    Formatter getFormatter();
+    PlaceholderReplacer getFormatter();
 
-    Formatter getDefaultFormatter();
+    PlaceholderReplacer getDefaultFormatter();
 
 }

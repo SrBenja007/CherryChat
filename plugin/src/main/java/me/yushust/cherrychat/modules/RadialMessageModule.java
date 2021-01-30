@@ -2,14 +2,14 @@ package me.yushust.cherrychat.modules;
 
 import lombok.Getter;
 import me.yushust.cherrychat.CherryChatPlugin;
-import me.yushust.cherrychat.api.bukkit.event.AsyncCherryChatEvent;
-import me.yushust.cherrychat.api.bukkit.module.ChatPluginModule;
+import me.yushust.cherrychat.api.bukkit.event.AsyncUserChatEvent;
+import me.yushust.cherrychat.api.bukkit.intercept.MessageInterceptor;
 import me.yushust.cherrychat.api.bukkit.util.Configuration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 @Getter
-public class RadialChatModule implements ChatPluginModule {
+public class RadialMessageModule implements MessageInterceptor {
 
     private boolean enabled;
     private boolean different;
@@ -19,7 +19,7 @@ public class RadialChatModule implements ChatPluginModule {
     private CherryChatPlugin plugin;
     private String moduleName = "radial-chat";
 
-    public RadialChatModule(CherryChatPlugin plugin) {
+    public RadialMessageModule(CherryChatPlugin plugin) {
         Configuration config = plugin.getConfig();
         this.plugin = plugin;
         this.enabled = config.getBoolean("radial-chat.enabled");
@@ -34,7 +34,7 @@ public class RadialChatModule implements ChatPluginModule {
     }
 
     @Override
-    public void onChat(AsyncCherryChatEvent event) {
+    public void onChat(AsyncUserChatEvent event) {
 
         if(!enabled) return;
         if(event.isCancelled()) return;

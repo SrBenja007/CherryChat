@@ -3,13 +3,13 @@ package me.yushust.cherrychat.modules;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import me.yushust.cherrychat.CherryChatPlugin;
-import me.yushust.cherrychat.api.bukkit.event.AsyncCherryChatEvent;
-import me.yushust.cherrychat.api.bukkit.module.ChatPluginModule;
+import me.yushust.cherrychat.api.bukkit.event.AsyncUserChatEvent;
+import me.yushust.cherrychat.api.bukkit.intercept.MessageInterceptor;
 import me.yushust.cherrychat.api.bukkit.util.Configuration;
 import me.yushust.cherrychat.util.Texts;
 
 @Getter
-public class CapsFilterModule implements ChatPluginModule {
+public class CapsFilterModule implements MessageInterceptor {
 
     private CherryChatPlugin plugin;
     private String moduleName = "caps-filter";
@@ -24,7 +24,7 @@ public class CapsFilterModule implements ChatPluginModule {
     }
 
     @Override
-    public void onChat(AsyncCherryChatEvent event) {
+    public void onChat(AsyncUserChatEvent event) {
         if(event.isCancelled()) return;
 
         String message = event.getMessage();
